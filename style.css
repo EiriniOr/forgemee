@@ -83,14 +83,39 @@
 .anim-in  { animation: slideUp   0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 .anim-out { animation: slideDown 0.35s cubic-bezier(0.55, 0, 1, 0.45) forwards; }
 
-/* ── Sticky nav ─────────────────────────────────────────────────────────── */
-#main-nav {
-  transition: opacity 0.28s ease, transform 0.28s ease;
+/* ── Left jump nav ───────────────────────────────────────────────────────── */
+.jump-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
 }
-#main-nav.nav-hidden {
-  opacity: 0;
-  transform: translateY(-100%);
+.jump-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+.jump-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0);
+  white-space: nowrap;
+  transition: color 0.2s;
   pointer-events: none;
+}
+.jump-link:hover .jump-dot,
+.jump-link.active .jump-dot {
+  background: rgba(167, 139, 250, 0.85);
+  transform: scale(1.35);
+}
+.jump-link:hover .jump-label {
+  color: rgba(255,255,255,0.55);
+}
+.jump-link.active .jump-label {
+  color: rgba(167, 139, 250, 0.75);
 }
 
 /* ── Phase number badge ─────────────────────────────────────────────────── */
