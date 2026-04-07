@@ -190,6 +190,26 @@ const RESOURCES = [
 
   // ── Phase 3 · AI Engineering ─────────────────────────────────────────────
   {
+    id: 'anthropic-academy',
+    name: 'Anthropic Academy',
+    description: '15+ free self-paced courses from Anthropic: Claude 101, Building with the Claude API, Claude Code in Action, Model Context Protocol, Agent Skills, and more. Official certifications included.',
+    url: 'https://anthropic.skilljar.com/',
+    type: 'platform',
+    level: 'intermediate',
+    tracks: ['ai'],
+    phase: 3,
+  },
+  {
+    id: 'anthropic-courses',
+    name: 'Anthropic Courses — GitHub',
+    description: 'Five free Jupyter notebook courses: API Fundamentals, Prompt Engineering Interactive Tutorial, Real World Prompting, Prompt Evaluations, and Tool Use. The official hands-on technical curriculum for building with Claude.',
+    url: 'https://github.com/anthropics/courses',
+    type: 'course',
+    level: 'intermediate',
+    tracks: ['ai'],
+    phase: 3,
+  },
+  {
     id: 'pe-guide',
     name: 'Prompt Engineering Guide',
     description: 'Comprehensive reference: zero/few-shot, chain-of-thought, RAG, function calling, and agentic system patterns.',
