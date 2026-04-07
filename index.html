@@ -11,7 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-[#080810] text-white min-h-screen antialiased overflow-x-hidden">
@@ -222,16 +224,40 @@
   <script>
   (function () {
 
-    // ── Supabase config ─────────────────────────────────────────────────
-    // TODO: replace both values after creating your Supabase project
-    //   Project Settings → API → Project URL  +  anon/public key
-    const SUPABASE_URL      = 'YOUR_PROJECT_URL';
-    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+    // ── Firebase config ─────────────────────────────────────────────────
+    // TODO: replace all values after creating your Firebase project
+    //   firebase.google.com → Add project (free Spark plan, no CC needed)
+    //   → Add a web app → copy the firebaseConfig object below
+    //   Also enable: Authentication → Sign-in method → Email/Password
+    //   Also create: Firestore Database → Start in production mode
+    //     then set rules (Firestore → Rules) to:
+    //
+    //   rules_version = '2';
+    //   service cloud.firestore {
+    //     match /databases/{database}/documents {
+    //       match /progress/{userId} {
+    //         allow read, write: if request.auth != null
+    //                            && request.auth.uid == userId;
+    //       }
+    //     }
+    //   }
+    const FIREBASE_CONFIG = {
+      apiKey:            'YOUR_API_KEY',
+      authDomain:        'YOUR_PROJECT_ID.firebaseapp.com',
+      projectId:         'YOUR_PROJECT_ID',
+      storageBucket:     'YOUR_PROJECT_ID.appspot.com',
+      messagingSenderId: 'YOUR_SENDER_ID',
+      appId:             'YOUR_APP_ID',
+    };
 
-    const SUPABASE_READY = !SUPABASE_URL.startsWith('YOUR_');
-    const sb = SUPABASE_READY
-      ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-      : null;
+    const FIREBASE_READY = FIREBASE_CONFIG.apiKey !== 'YOUR_API_KEY';
+    let auth = null;
+    let db   = null;
+    if (FIREBASE_READY) {
+      firebase.initializeApp(FIREBASE_CONFIG);
+      auth = firebase.auth();
+      db   = firebase.firestore();
+    }
 
     // ── App state ───────────────────────────────────────────────────────
     let currentUser  = null;
@@ -468,7 +494,7 @@
     }
     async function submitAuth(e) {
       e.preventDefault();
-      if (!sb) return;
+      if (!auth) return;
       const mode      = document.getElementById('auth-form').dataset.mode;
       const email     = document.getElementById('auth-email').value.trim();
       const password  = document.getElementById('auth-password').value;
@@ -479,76 +505,63 @@
       submitBtn.disabled    = true;
       submitBtn.textContent = mode === 'signin' ? 'Signing in…' : 'Creating account…';
 
-      let error, data;
-      if (mode === 'signin') {
-        ({ error } = await sb.auth.signInWithPassword({ email, password }));
-      } else {
-        ({ data, error } = await sb.auth.signUp({ email, password }));
-      }
-
-      submitBtn.disabled    = false;
-      submitBtn.textContent = mode === 'signin' ? 'Sign in' : 'Create account';
-
-      if (error) {
-        msgEl.className = 'text-red-400 text-xs mb-3';
-        msgEl.textContent = error.message;
-        msgEl.classList.remove('hidden');
-      } else if (mode === 'signup' && data && !data.session) {
-        // Email confirmation required — let user know
-        msgEl.className = 'text-emerald-400 text-xs mb-3';
-        msgEl.textContent = 'Check your email to confirm your account.';
-        msgEl.classList.remove('hidden');
-      } else {
+      try {
+        if (mode === 'signin') {
+          await auth.signInWithEmailAndPassword(email, password);
+        } else {
+          await auth.createUserWithEmailAndPassword(email, password);
+        }
         hideAuthModal();
+      } catch (err) {
+        msgEl.className   = 'text-red-400 text-xs mb-3';
+        msgEl.textContent = err.message;
+        msgEl.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled    = false;
+        submitBtn.textContent = mode === 'signin' ? 'Sign in' : 'Create account';
       }
     }
 
-    // ── Supabase / progress ─────────────────────────────────────────────
+    // ── Firebase / progress ─────────────────────────────────────────────
     async function loadProgress() {
-      if (!sb) return;
-      const { data, error } = await sb.from('user_progress').select('resource_id');
-      if (!error && data) completedSet = new Set(data.map(r => r.resource_id));
+      if (!db) return;
+      const doc = await db.collection('progress').doc(currentUser.uid).get();
+      completedSet = new Set(doc.exists ? (doc.data().completed || []) : []);
     }
 
     async function toggleResource(id) {
       if (!currentUser) {
-        if (SUPABASE_READY) showAuthModal('signin');
+        if (FIREBASE_READY) showAuthModal('signin');
         return;
       }
+      const ref = db.collection('progress').doc(currentUser.uid);
       if (completedSet.has(id)) {
         completedSet.delete(id);
-        await sb.from('user_progress')
-          .delete()
-          .eq('user_id', currentUser.id)
-          .eq('resource_id', id);
+        await ref.set(
+          { completed: firebase.firestore.FieldValue.arrayRemove(id) },
+          { merge: true }
+        );
       } else {
         completedSet.add(id);
-        await sb.from('user_progress')
-          .upsert({ user_id: currentUser.id, resource_id: id });
+        await ref.set(
+          { completed: firebase.firestore.FieldValue.arrayUnion(id) },
+          { merge: true }
+        );
       }
       renderCheckboxes();
       renderProgressBars();
     }
 
-    async function initAuth() {
-      if (!SUPABASE_READY) {
-        // Supabase not configured yet — hide auth UI gracefully
+    function initAuth() {
+      if (!FIREBASE_READY) {
         document.getElementById('auth-open-btn').classList.add('hidden');
         document.getElementById('progress-signin-btn')?.classList.add('hidden');
         return;
       }
-      const { data: { session } } = await sb.auth.getSession();
-      if (session) {
-        currentUser = session.user;
-        await loadProgress();
-      }
-      renderAuthState();
-      renderCheckboxes();
-      renderProgressBars();
-
-      sb.auth.onAuthStateChange(async (_event, session) => {
-        currentUser = session?.user ?? null;
-        if (currentUser) {
+      // onAuthStateChanged fires on load with current session, then on every change
+      auth.onAuthStateChanged(async user => {
+        currentUser = user;
+        if (user) {
           await loadProgress();
         } else {
           completedSet.clear();
@@ -618,7 +631,7 @@
         btn.addEventListener('click', () => setAuthTab(btn.dataset.tab))
       );
       document.getElementById('auth-form').addEventListener('submit', submitAuth);
-      document.getElementById('signout-btn').addEventListener('click', () => sb?.auth.signOut());
+      document.getElementById('signout-btn').addEventListener('click', () => auth?.signOut());
       document.getElementById('progress-signin-btn')
         ?.addEventListener('click', () => showAuthModal('signup'));
       document.addEventListener('keydown', e => { if (e.key === 'Escape') hideAuthModal(); });
