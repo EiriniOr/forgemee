@@ -1,5 +1,6 @@
 // MakeMee — Resource data
-// Fields: id, name, description, url, type, level, tracks[], phase, subgroup?
+// Fields: id, name, description, url, type, level, tracks[], phase, subgroup?, alt_group?
+// alt_group: string key — resources sharing the same key are mutually exclusive alternatives
 // type: 'course' | 'book' | 'youtube' | 'platform' | 'guide'
 // level: 'beginner' | 'intermediate' | 'advanced'
 // tracks: subset of ['ds', 'ml', 'ai']
@@ -11,24 +12,26 @@ const RESOURCES = [
   {
     id: 'brocode-python',
     name: 'Python Full Course for Beginners — Bro Code',
-    description: '12-hour single-video Python course. Casual, fast-paced, and comprehensive. Great alternative to CS50P if you prefer video lectures.',
+    description: '12-hour single-video Python course. Casual, fast-paced, and comprehensive. Pick this if you learn better by watching and following along.',
     url: 'https://www.youtube.com/watch?v=XKHEtdqhLK8',
     type: 'youtube',
     level: 'beginner',
     tracks: ['ds', 'ml', 'ai'],
     phase: 0,
     subgroup: 'python',
+    alt_group: 'python-start',
   },
   {
     id: 'cs50p',
     name: "CS50's Introduction to Programming with Python",
-    description: "Harvard's gold-standard free Python course. Covers functions, OOP, file I/O, libraries, and testing. The best starting point.",
+    description: "Harvard's gold-standard free Python course. Covers functions, OOP, file I/O, libraries, and testing. Pick this if you prefer structured, academically rigorous learning.",
     url: 'https://cs50.harvard.edu/python/',
     type: 'course',
     level: 'beginner',
     tracks: ['ds', 'ml', 'ai'],
     phase: 0,
     subgroup: 'python',
+    alt_group: 'python-start',
   },
   {
     id: 'learnpython',
@@ -46,24 +49,26 @@ const RESOURCES = [
   {
     id: 'khan-linalg',
     name: 'Khan Academy — Linear Algebra',
-    description: 'Thorough, free linear algebra from the ground up. Vectors, matrices, transformations, and eigenvalues — the language ML runs on.',
+    description: 'Thorough, free linear algebra from the ground up. Vectors, matrices, transformations, and eigenvalues. Pick this for a gentler, visual-first pace.',
     url: 'https://www.khanacademy.org/math/linear-algebra',
     type: 'course',
     level: 'beginner',
     tracks: ['ds', 'ml', 'ai'],
     phase: 0,
     subgroup: 'math',
+    alt_group: 'linear-algebra',
   },
   {
     id: 'mit-18-06',
     name: 'MIT OCW 18.06 — Linear Algebra (Gilbert Strang)',
-    description: 'The legendary MIT linear algebra course. Widely considered the definitive treatment of the subject. Free and timeless.',
+    description: 'The legendary MIT linear algebra course. Widely considered the definitive treatment. Pick this if you want rigorous, proof-grounded understanding.',
     url: 'https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/',
     type: 'course',
     level: 'intermediate',
     tracks: ['ds', 'ml', 'ai'],
     phase: 0,
     subgroup: 'math',
+    alt_group: 'linear-algebra',
   },
   {
     id: 'dlai-math',
@@ -143,12 +148,13 @@ const RESOURCES = [
   {
     id: 'fastai-course',
     name: 'fast.ai — Practical Deep Learning for Coders',
-    description: 'Top-down: build real applications first, learn theory second. Uses PyTorch. The most practical deep learning course available.',
+    description: 'Top-down: build real applications first, learn theory second. Uses PyTorch. Pick this if you learn best by doing and want intuition before math.',
     url: 'https://course.fast.ai/',
     type: 'course',
     level: 'intermediate',
     tracks: ['ml', 'ai'],
     phase: 2,
+    alt_group: 'dl-main',
   },
   {
     id: 'fastai-book',
@@ -163,12 +169,13 @@ const RESOURCES = [
   {
     id: 'dlai-dl-spec',
     name: 'Deep Learning Specialization — Andrew Ng (Coursera)',
-    description: '5-course series: NNs, hyperparameter tuning, ML strategy, CNNs, and RNNs/sequence models. Free audit available.',
+    description: '5-course series: NNs, hyperparameter tuning, ML strategy, CNNs, and RNNs/sequence models. Pick this if you prefer bottom-up theory before implementation.',
     url: 'https://www.coursera.org/specializations/deep-learning',
     type: 'course',
     level: 'intermediate',
     tracks: ['ml', 'ai'],
     phase: 2,
+    alt_group: 'dl-main',
   },
   {
     id: 'karpathy-zero',
