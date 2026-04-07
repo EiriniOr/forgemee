@@ -84,6 +84,10 @@
 .anim-out { animation: slideDown 0.35s cubic-bezier(0.55, 0, 1, 0.45) forwards; }
 
 /* ── Left jump nav ───────────────────────────────────────────────────────── */
+#jump-nav {
+  /* right edge sits 12px left of the content container edge */
+  right: calc(50% + 576px + 12px);
+}
 .jump-link {
   display: flex;
   align-items: center;
@@ -92,8 +96,8 @@
   cursor: pointer;
 }
 .jump-dot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: rgba(255,255,255,0.18);
   flex-shrink: 0;
@@ -101,21 +105,23 @@
 }
 .jump-label {
   font-size: 11px;
-  color: rgba(255,255,255,0);
+  color: rgba(255,255,255,0.28);
   white-space: nowrap;
   transition: color 0.2s;
-  pointer-events: none;
 }
-.jump-link:hover .jump-dot,
-.jump-link.active .jump-dot {
+.jump-link:hover .jump-dot {
   background: rgba(167, 139, 250, 0.85);
   transform: scale(1.35);
 }
 .jump-link:hover .jump-label {
-  color: rgba(255,255,255,0.55);
+  color: rgba(255,255,255,0.65);
+}
+.jump-link.active .jump-dot {
+  background: rgba(167, 139, 250, 0.85);
+  transform: scale(1.35);
 }
 .jump-link.active .jump-label {
-  color: rgba(167, 139, 250, 0.75);
+  color: rgba(167, 139, 250, 0.9);
 }
 
 /* ── Phase number badge ─────────────────────────────────────────────────── */

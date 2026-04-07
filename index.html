@@ -181,7 +181,7 @@
 
 
   <!-- ── LEFT JUMP NAV ──────────────────────────────────────────────────── -->
-  <aside id="jump-nav" class="fixed left-5 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-2.5">
+  <aside id="jump-nav" class="fixed top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-2.5">
     <a href="#phase-0" class="jump-link" data-section="phase-0"><span class="jump-dot"></span><span class="jump-label">Foundations</span></a>
     <a href="#phase-1" class="jump-link" data-section="phase-1"><span class="jump-dot"></span><span class="jump-label">Core ML & DS</span></a>
     <a href="#phase-2" class="jump-link" data-section="phase-2"><span class="jump-dot"></span><span class="jump-label">Deep Learning</span></a>
@@ -1140,7 +1140,10 @@
     // ── Events ──────────────────────────────────────────────────────────
     function initEvents() {
       document.querySelectorAll('.track-btn').forEach(btn =>
-        btn.addEventListener('click', () => applyTrack(btn.dataset.track))
+        btn.addEventListener('click', () => {
+          applyTrack(btn.dataset.track);
+          document.getElementById('phase-0')?.scrollIntoView({ behavior: 'smooth' });
+        })
       );
       document.querySelectorAll('.track-cta').forEach(btn =>
         btn.addEventListener('click', () => {
