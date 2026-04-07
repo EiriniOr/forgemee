@@ -562,14 +562,31 @@
       }
     }
 
+    // ── Progress calculation (alt-group aware) ───────────────────────────
+    // Each alt_group counts as ONE slot: complete if ANY member is done.
+    function trackProgress(track) {
+      const all = RESOURCES.filter(r => r.tracks.includes(track));
+      const seenGroups = new Set();
+      let total = 0, done = 0;
+      all.forEach(r => {
+        if (r.alt_group) {
+          if (seenGroups.has(r.alt_group)) return; // already counted this group
+          seenGroups.add(r.alt_group);
+          total++;
+          if (all.filter(ar => ar.alt_group === r.alt_group).some(ar => completedSet.has(ar.id))) done++;
+        } else {
+          total++;
+          if (completedSet.has(r.id)) done++;
+        }
+      });
+      return { total, done, pct: total > 0 ? Math.round(done / total * 100) : 0 };
+    }
+
     // ── Progress bars ───────────────────────────────────────────────────
     function renderProgressBars() {
       ['ds', 'ml', 'ai'].forEach(track => {
-        const all   = RESOURCES.filter(r => r.tracks.includes(track));
-        const total = all.length;
-        const done  = all.filter(r => completedSet.has(r.id)).length;
-        const pct   = total > 0 ? Math.round(done / total * 100) : 0;
-        const el    = document.querySelector(`.progress-track[data-track="${track}"]`);
+        const { total, done, pct } = trackProgress(track);
+        const el = document.querySelector(`.progress-track[data-track="${track}"]`);
         if (!el) return;
         el.querySelector('.progress-count').textContent      = `${done} / ${total}`;
         el.querySelector('.progress-bar-fill').style.width   = `${pct}%`;
@@ -752,9 +769,8 @@
     function checkNewlyCompletedTracks() {
       ['ds', 'ml', 'ai'].forEach(track => {
         if (certificatesEarned[track]) return; // already earned
-        const all = RESOURCES.filter(r => r.tracks.includes(track));
-        if (!all.length) return;
-        if (all.filter(r => completedSet.has(r.id)).length === all.length) {
+        const { total, done } = trackProgress(track);
+        if (total > 0 && done === total) {
           triggerCelebration(track);
           recordCertificate(track);
         }
