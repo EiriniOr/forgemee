@@ -355,7 +355,51 @@
     function buildGrid(resources) {
       const grid = document.createElement('div');
       grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
-      resources.forEach(r => grid.appendChild(buildCard(r)));
+
+      // Group resources that share an alt_group
+      const altMap = {};
+      resources.forEach(r => {
+        if (r.alt_group) (altMap[r.alt_group] = altMap[r.alt_group] || []).push(r);
+      });
+
+      const placed = new Set();
+      resources.forEach(r => {
+        if (placed.has(r.id)) return;
+        const alts = r.alt_group && altMap[r.alt_group];
+        if (alts && alts.length > 1) {
+          // Full-width block spanning all columns
+          const block = document.createElement('div');
+          block.className = 'alt-group-block col-span-1 md:col-span-2 lg:col-span-3';
+
+          const lbl = document.createElement('div');
+          lbl.className = 'text-[10px] font-bold text-amber-400/50 uppercase tracking-[0.15em] mb-3 flex items-center gap-1.5';
+          lbl.innerHTML = '<span>⇌</span> Alternative paths — pick one';
+          block.appendChild(lbl);
+
+          const row = document.createElement('div');
+          row.className = 'alt-row flex flex-col md:flex-row gap-3 items-stretch';
+
+          alts.forEach((ar, idx) => {
+            if (idx > 0) {
+              const sep = document.createElement('div');
+              sep.className = 'alt-sep flex md:flex-col items-center justify-center flex-shrink-0 py-1 md:py-0 md:px-1';
+              sep.innerHTML = '<span class="text-[11px] font-bold text-white/18 tracking-widest">or</span>';
+              row.appendChild(sep);
+            }
+            const w = buildCard(ar);
+            w.classList.add('flex-1', 'min-w-0');
+            row.appendChild(w);
+            placed.add(ar.id);
+          });
+
+          block.appendChild(row);
+          grid.appendChild(block);
+        } else {
+          grid.appendChild(buildCard(r));
+          placed.add(r.id);
+        }
+      });
+
       return grid;
     }
 
@@ -417,6 +461,11 @@
       document.querySelectorAll('.resource-card-wrapper[data-tracks]').forEach(w => {
         const tracks = w.dataset.tracks.split(',');
         w.style.display = (track === 'all' || tracks.includes(track)) ? '' : 'none';
+      });
+      document.querySelectorAll('.alt-group-block').forEach(block => {
+        const any = [...block.querySelectorAll('.resource-card-wrapper')]
+          .some(c => c.style.display !== 'none');
+        block.style.display = any ? '' : 'none';
       });
       document.querySelectorAll('.phase-section').forEach(section => {
         const any = [...section.querySelectorAll('.resource-card-wrapper')]

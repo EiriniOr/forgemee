@@ -253,6 +253,14 @@
   border-color: rgba(34, 197, 94, 0.15) !important;
 }
 
+/* ── Alternative path groups ─────────────────────────────────────────────── */
+.alt-group-block {
+  background: rgba(251, 191, 36, 0.015);
+  border: 1px solid rgba(251, 191, 36, 0.09);
+  border-radius: 16px;
+  padding: 16px;
+}
+
 /* ── Mobile nav: hide track labels, show short labels ───────────────────── */
 @media (max-width: 640px) {
   .track-btn-long { display: none; }
