@@ -252,6 +252,41 @@
   </main>
 
 
+  <!-- ── WALL OF FAME ──────────────────────────────────────────────────────── -->
+  <section id="contributors" class="max-w-6xl mx-auto px-5 pt-2 pb-20 fade-in-up">
+    <div class="text-center mb-7">
+      <h2 class="text-xs font-bold text-white/28 uppercase tracking-[0.15em] mb-1.5">Wall of Fame</h2>
+      <p class="text-white/20 text-xs">Community members whose resource suggestions made it onto the list.</p>
+    </div>
+
+    <!-- ── Empty state — shown until first contributor is added ── -->
+    <div class="border border-dashed border-white/[0.07] rounded-2xl py-12 text-center">
+      <div class="text-3xl mb-3">🏆</div>
+      <p class="text-white/30 text-sm font-medium mb-1">No contributors yet — be the first!</p>
+      <p class="text-white/18 text-xs leading-relaxed">
+        <a href="suggestions.html" class="text-purple-400/50 hover:text-purple-400 transition-colors underline underline-offset-2 decoration-purple-400/25">Suggest a resource</a>
+        and include your name in the form.<br>
+        If it makes the list, your name will appear here with a note on what you contributed.
+      </p>
+    </div>
+
+    <!--
+      ── HOW TO ADD A CONTRIBUTOR ─────────────────────────────────────────────
+      When a suggestion is accepted, add an entry to the grid below and remove
+      the empty-state div above. Format:
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div class="contributor-card rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center">
+          <div class="text-lg mb-1">✦</div>
+          <div class="font-semibold text-white/75 text-sm mb-0.5">Name Here</div>
+          <div class="text-[11px] text-purple-400/50 leading-snug">Suggested: Resource Name</div>
+          <div class="text-[10px] text-white/18 mt-1">DS · ML</div>
+        </div>
+      </div>
+    -->
+  </section>
+
+
   <!-- ── FOOTER ─────────────────────────────────────────────────────────── -->
   <footer class="border-t border-white/[0.05] py-14 px-6">
     <div class="max-w-6xl mx-auto flex flex-col items-center gap-3 text-center">
