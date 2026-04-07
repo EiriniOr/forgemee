@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ForgeMee — Become an AI Engineer, Data Scientist, or ML Engineer</title>
+  <meta name="description" content="Curated free resources to become an AI Engineer, Data Scientist, or ML Engineer — structured from foundations to production expertise.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#080810] text-white min-h-screen antialiased overflow-x-hidden">
+
+  <!-- ────────────────────────────────────────────────────────────────────
+       NAV (hidden until hero scrolls away)
+  ──────────────────────────────────────────────────────────────────────── -->
+  <nav id="main-nav" class="nav-hidden fixed top-0 left-0 right-0 z-50 bg-[#080810]/90 border-b border-white/[0.06] backdrop-blur-xl">
+    <div class="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between gap-4">
+      <a href="#hero" class="font-black text-lg tracking-tight flex-shrink-0">
+        Forge<span class="text-purple-400">Mee</span>
+      </a>
+      <div class="flex gap-1.5 flex-wrap justify-end">
+        <button class="track-btn text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 hover:text-white" data-track="all">
+          <span class="track-btn-long">All tracks</span>
+          <span class="track-btn-short">All</span>
+        </button>
+        <button class="track-btn text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 hover:text-white" data-track="ds">
+          <span class="track-btn-long">Data Scientist</span>
+          <span class="track-btn-short">DS</span>
+        </button>
+        <button class="track-btn text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 hover:text-white" data-track="ml">
+          <span class="track-btn-long">ML Engineer</span>
+          <span class="track-btn-short">ML</span>
+        </button>
+        <button class="track-btn text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 hover:text-white" data-track="ai">
+          <span class="track-btn-long">AI Engineer</span>
+          <span class="track-btn-short">AI</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ────────────────────────────────────────────────────────────────────
+       HERO
+  ──────────────────────────────────────────────────────────────────────── -->
+  <section id="hero" class="hero-bg hero-grid relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 py-24">
+
+    <!-- Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 text-center w-full max-w-4xl mx-auto flex flex-col items-center">
+
+      <!-- Pill badge -->
+      <div class="inline-flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-white/40 mb-10">
+        <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse inline-block"></span>
+        Free resources only &middot; Curated 2025
+      </div>
+
+      <!-- Wordmark -->
+      <h1 class="text-7xl md:text-9xl font-black tracking-tight leading-none mb-8 select-none">
+        Forge<span class="text-purple-400">Mee</span>
+      </h1>
+
+      <!-- Cycling headline -->
+      <div class="text-white/45 text-xl md:text-2xl font-medium mb-1 select-none">Forge me into a</div>
+      <div class="h-16 md:h-24 flex items-center justify-center overflow-hidden mb-12 select-none">
+        <span id="cycle-text"
+          class="text-5xl md:text-7xl font-black bg-gradient-to-r from-violet-400 via-blue-400 to-pink-400 bg-clip-text text-transparent">
+        </span>
+      </div>
+
+      <!-- Subheading -->
+      <p class="text-white/38 text-base md:text-lg max-w-lg mx-auto leading-relaxed mb-14">
+        A structured roadmap of the best free resources on the internet —
+        from Python basics to production AI systems.
+      </p>
+
+      <!-- Track picker cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
+
+        <button class="track-cta group text-left p-5 rounded-2xl border border-blue-500/14 bg-blue-950/20
+                        hover:bg-blue-950/35 hover:border-blue-500/32 transition-all duration-200" data-track="ds">
+          <div class="text-2xl mb-3">📊</div>
+          <div class="font-bold text-blue-300 text-base mb-1">Data Scientist</div>
+          <div class="text-xs text-white/32 leading-relaxed">Stats · Python · ML · Analysis</div>
+          <div class="mt-4 text-xs text-blue-500/45 group-hover:text-blue-400 transition-colors">Start this track →</div>
+        </button>
+
+        <button class="track-cta group text-left p-5 rounded-2xl border border-violet-500/14 bg-violet-950/20
+                        hover:bg-violet-950/35 hover:border-violet-500/32 transition-all duration-200" data-track="ml">
+          <div class="text-2xl mb-3">🧠</div>
+          <div class="font-bold text-violet-300 text-base mb-1">ML Engineer</div>
+          <div class="text-xs text-white/32 leading-relaxed">Deep Learning · PyTorch · Systems</div>
+          <div class="mt-4 text-xs text-violet-500/45 group-hover:text-violet-400 transition-colors">Start this track →</div>
+        </button>
+
+        <button class="track-cta group text-left p-5 rounded-2xl border border-pink-500/14 bg-pink-950/20
+                        hover:bg-pink-950/35 hover:border-pink-500/32 transition-all duration-200" data-track="ai">
+          <div class="text-2xl mb-3">⚡</div>
+          <div class="font-bold text-pink-300 text-base mb-1">AI Engineer</div>
+          <div class="text-xs text-white/32 leading-relaxed">LLMs · RAG · Agents · Prompting</div>
+          <div class="mt-4 text-xs text-pink-500/45 group-hover:text-pink-400 transition-colors">Start this track →</div>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-white/18 text-[11px] tracking-widest uppercase">
+      <span>scroll</span>
+      <svg class="w-3.5 h-3.5 animate-bounce mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </div>
+  </section>
+
+
+  <!-- ────────────────────────────────────────────────────────────────────
+       ROADMAP
+  ──────────────────────────────────────────────────────────────────────── -->
+  <main id="roadmap" class="max-w-6xl mx-auto px-5 pt-20 pb-28">
+
+    <!-- Active-track banner -->
+    <div id="track-banner" class="text-center mb-14 hidden">
+      <div class="inline-flex items-center gap-2.5 bg-white/[0.04] border border-white/[0.08] rounded-full px-5 py-2.5 text-sm">
+        <span class="text-white/38">Showing</span>
+        <span id="track-banner-label" class="font-semibold"></span>
+        <button id="clear-track" class="text-white/24 hover:text-white/60 transition-colors text-xs ml-0.5">✕ all</button>
+      </div>
+    </div>
+
+    <!-- Phases injected here -->
+    <div id="phases"></div>
+
+  </main>
+
+
+  <!-- ────────────────────────────────────────────────────────────────────
+       FOOTER
+  ──────────────────────────────────────────────────────────────────────── -->
+  <footer class="border-t border-white/[0.05] py-14 px-6">
+    <div class="max-w-6xl mx-auto flex flex-col items-center gap-3 text-center">
+      <div class="font-black text-xl">Forge<span class="text-purple-400">Mee</span></div>
+      <p class="text-white/22 text-sm max-w-sm leading-relaxed">
+        All resources are free or have a substantial free tier.<br>No affiliations or sponsorships.
+      </p>
+    </div>
+  </footer>
+
+
+  <!-- ────────────────────────────────────────────────────────────────────
+       DATA + APP SCRIPT
+  ──────────────────────────────────────────────────────────────────────── -->
+  <script src="resources.js"></script>
+  <script>
+  (function () {
+
+    // ── Phase metadata ─────────────────────────────────────────────────
+    const PHASES = [
+      {
+        id: 0,
+        label: '00',
+        title: 'Foundations',
+        subtitle: 'Python programming and essential mathematics — the bedrock everything else is built on.',
+      },
+      {
+        id: 1,
+        label: '01',
+        title: 'Core ML & Data Science',
+        subtitle: 'Classical algorithms, data manipulation, and statistical thinking.',
+      },
+      {
+        id: 2,
+        label: '02',
+        title: 'Deep Learning',
+        subtitle: 'Neural networks from intuition to implementation — vision, NLP, transformers.',
+      },
+      {
+        id: 3,
+        label: '03',
+        title: 'AI Engineering',
+        subtitle: 'LLMs, RAG pipelines, prompt engineering, and production agent systems.',
+      },
+      {
+        id: 4,
+        label: '∞',
+        title: 'Practice & Projects',
+        subtitle: 'Build a portfolio, compete in challenges, and stay current with the field.',
+      },
+    ];
+
+    // ── Lookup maps ────────────────────────────────────────────────────
+    const TYPE_ICON  = { course: '🎓', book: '📖', youtube: '🎥', platform: '🏆', guide: '📋' };
+    const TYPE_LABEL = { course: 'Course', book: 'Book', youtube: 'YouTube', platform: 'Platform', guide: 'Guide' };
+
+    const LEVEL_CLS = {
+      beginner:     'text-emerald-400 bg-emerald-400/10',
+      intermediate: 'text-amber-400  bg-amber-400/10',
+      advanced:     'text-red-400    bg-red-400/10',
+    };
+
+    const TRACK_TAG_CLS = {
+      ds: 'bg-blue-500/10   text-blue-400   border border-blue-500/18',
+      ml: 'bg-violet-500/10 text-violet-400 border border-violet-500/18',
+      ai: 'bg-pink-500/10   text-pink-400   border border-pink-500/18',
+    };
+    const TRACK_SHORT = { ds: 'DS', ml: 'ML', ai: 'AI' };
+
+    const TRACK_BANNER_HTML = {
+      ds: '<span class="text-blue-400">Data Scientist</span> track',
+      ml: '<span class="text-violet-400">ML Engineer</span> track',
+      ai: '<span class="text-pink-400">AI Engineer</span> track',
+    };
+
+    // ── Build a card ────────────────────────────────────────────────────
+    function buildCard(r) {
+      const primary = r.tracks[0];
+      const tags = r.tracks
+        .map(t => `<span class="text-[11px] px-2 py-0.5 rounded-full ${TRACK_TAG_CLS[t]}">${TRACK_SHORT[t]}</span>`)
+        .join('');
+
+      const el = document.createElement('a');
+      el.href = r.url;
+      el.target = '_blank';
+      el.rel = 'noopener noreferrer';
+      el.className = `resource-card glow-${primary} rounded-2xl p-5`;
+      el.dataset.tracks = r.tracks.join(',');
+
+      el.innerHTML = `
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <div class="w-9 h-9 rounded-xl bg-white/[0.05] flex items-center justify-center text-lg flex-shrink-0">
+            ${TYPE_ICON[r.type]}
+          </div>
+          <span class="text-[11px] px-2.5 py-0.5 rounded-full font-medium flex-shrink-0 ${LEVEL_CLS[r.level]}">
+            ${r.level.charAt(0).toUpperCase() + r.level.slice(1)}
+          </span>
+        </div>
+        <div class="text-[11px] font-medium text-white/25 mb-1.5 uppercase tracking-wider">${TYPE_LABEL[r.type]}</div>
+        <h3 class="font-semibold text-white/90 text-sm leading-snug mb-2">${r.name}</h3>
+        <p class="text-white/35 text-xs leading-relaxed flex-grow">${r.description}</p>
+        <div class="flex items-center justify-between mt-4 pt-3 border-t border-white/[0.055]">
+          <div class="flex gap-1.5 flex-wrap">${tags}</div>
+          <span class="text-[11px] text-white/22 flex-shrink-0 ml-2">Open ↗</span>
+        </div>`;
+
+      return el;
+    }
+
+    // ── Build a card grid ───────────────────────────────────────────────
+    function buildGrid(resources) {
+      const grid = document.createElement('div');
+      grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
+      resources.forEach(r => grid.appendChild(buildCard(r)));
+      return grid;
+    }
+
+    // ── Render all phases ───────────────────────────────────────────────
+    function renderPhases() {
+      const container = document.getElementById('phases');
+
+      PHASES.forEach((phase, pi) => {
+        const items = RESOURCES.filter(r => r.phase === phase.id);
+        if (!items.length) return;
+
+        const section = document.createElement('section');
+        section.id = `phase-${phase.id}`;
+        section.className = 'phase-section mb-20 fade-in-up';
+        if (pi > 0) section.style.transitionDelay = `${pi * 0.06}s`;
+
+        // Header
+        const header = document.createElement('div');
+        header.className = 'flex items-center gap-4 mb-8';
+        header.innerHTML = `
+          <div class="phase-badge w-11 h-11 rounded-xl flex items-center justify-center font-black text-purple-300/80 text-sm flex-shrink-0">
+            ${phase.label}
+          </div>
+          <div>
+            <h2 class="text-xl md:text-2xl font-bold">${phase.title}</h2>
+            <p class="text-white/32 text-sm mt-0.5">${phase.subtitle}</p>
+          </div>`;
+        section.appendChild(header);
+
+        // Phase 0 splits into Python / Math subgroups
+        if (phase.id === 0) {
+          [
+            { key: 'python', label: 'Python' },
+            { key: 'math',   label: 'Mathematics' },
+          ].forEach(({ key, label }) => {
+            const sub = items.filter(r => r.subgroup === key);
+            if (!sub.length) return;
+
+            const wrap = document.createElement('div');
+            wrap.className = 'mb-8';
+
+            const sublabel = document.createElement('div');
+            sublabel.className = 'text-[10px] font-bold text-white/22 uppercase tracking-[0.15em] mb-4';
+            sublabel.textContent = label;
+            wrap.appendChild(sublabel);
+            wrap.appendChild(buildGrid(sub));
+            section.appendChild(wrap);
+          });
+        } else {
+          section.appendChild(buildGrid(items));
+        }
+
+        container.appendChild(section);
+      });
+    }
+
+    // ── Track filter ────────────────────────────────────────────────────
+    let activeTrack = 'all';
+
+    function applyTrack(track) {
+      activeTrack = track;
+
+      // Update every track button
+      document.querySelectorAll('.track-btn').forEach(btn => {
+        btn.classList.remove('is-active-all', 'is-active-ds', 'is-active-ml', 'is-active-ai');
+        if (btn.dataset.track === track) btn.classList.add(`is-active-${track}`);
+      });
+
+      // Show/hide cards
+      document.querySelectorAll('.resource-card[data-tracks]').forEach(card => {
+        const tracks = card.dataset.tracks.split(',');
+        card.style.display = (track === 'all' || tracks.includes(track)) ? '' : 'none';
+      });
+
+      // Hide phases that have no visible cards
+      document.querySelectorAll('.phase-section').forEach(section => {
+        const anyVisible = [...section.querySelectorAll('.resource-card')]
+          .some(c => c.style.display !== 'none');
+        section.style.display = anyVisible ? '' : 'none';
+      });
+
+      // Banner
+      const banner = document.getElementById('track-banner');
+      if (track === 'all') {
+        banner.classList.add('hidden');
+      } else {
+        banner.classList.remove('hidden');
+        document.getElementById('track-banner-label').innerHTML = TRACK_BANNER_HTML[track];
+      }
+    }
+
+    // ── Cycling hero text ───────────────────────────────────────────────
+    const WORDS = ['AI Engineer', 'Data Scientist', 'ML Engineer'];
+    let wordIdx = 0;
+    const cycleEl = document.getElementById('cycle-text');
+
+    function initCycle() {
+      cycleEl.textContent = WORDS[0];
+      cycleEl.classList.add('anim-in');
+
+      setInterval(() => {
+        cycleEl.classList.remove('anim-in');
+        cycleEl.classList.add('anim-out');
+
+        setTimeout(() => {
+          wordIdx = (wordIdx + 1) % WORDS.length;
+          cycleEl.textContent = WORDS[wordIdx];
+          cycleEl.classList.remove('anim-out');
+          cycleEl.classList.add('anim-in');
+          setTimeout(() => cycleEl.classList.remove('anim-in'), 460);
+        }, 360);
+      }, 2800);
+    }
+
+    // ── Nav reveal on scroll ────────────────────────────────────────────
+    function initNav() {
+      const nav  = document.getElementById('main-nav');
+      const hero = document.getElementById('hero');
+      const sync = () => nav.classList.toggle('nav-hidden', hero.getBoundingClientRect().bottom >= 60);
+      window.addEventListener('scroll', sync, { passive: true });
+      sync();
+    }
+
+    // ── Fade-in on scroll ───────────────────────────────────────────────
+    function initFadeIn() {
+      const io = new IntersectionObserver(
+        entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+        { threshold: 0.07 }
+      );
+      document.querySelectorAll('.fade-in-up').forEach(el => io.observe(el));
+    }
+
+    // ── Wire events ─────────────────────────────────────────────────────
+    function initEvents() {
+      // Nav track buttons
+      document.querySelectorAll('.track-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyTrack(btn.dataset.track));
+      });
+
+      // Hero track CTA cards
+      document.querySelectorAll('.track-cta').forEach(btn => {
+        btn.addEventListener('click', () => {
+          applyTrack(btn.dataset.track);
+          document.getElementById('roadmap').scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      // Clear banner
+      document.getElementById('clear-track').addEventListener('click', () => applyTrack('all'));
+    }
+
+    // ── Boot ────────────────────────────────────────────────────────────
+    renderPhases();
+    initCycle();
+    initNav();
+    initFadeIn();
+    initEvents();
+    applyTrack('all');
+
+  })();
+  </script>
+
+</body>
+</html>
