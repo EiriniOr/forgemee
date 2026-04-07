@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Pacifico&display=swap" rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -49,8 +49,8 @@
   <!-- ── NAV ────────────────────────────────────────────────────────────── -->
   <nav id="main-nav" class="nav-hidden fixed top-0 left-0 right-0 z-50 bg-[#080810]/90 border-b border-white/[0.06] backdrop-blur-xl">
     <div class="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between gap-3">
-      <a href="#hero" class="font-black text-lg tracking-tight flex-shrink-0">
-        Forge<span class="text-purple-400">Mee</span>
+      <a href="#hero" class="text-xl flex-shrink-0 leading-none">
+        <span class="forge-text">Forge</span><span class="mee-text text-purple-400">Mee</span>
       </a>
       <div class="flex items-center gap-2 flex-wrap justify-end">
         <div class="flex gap-1.5">
@@ -92,14 +92,13 @@
 
     <div class="relative z-10 text-center w-full max-w-4xl mx-auto flex flex-col items-center">
 
-      <div class="inline-flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-white/40 mb-10">
-        <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse inline-block"></span>
-        Free resources only &middot; Curated 2025
-      </div>
-
-      <h1 class="text-7xl md:text-9xl font-black tracking-tight leading-none mb-8 select-none">
-        Forge<span class="text-purple-400">Mee</span>
+      <h1 class="text-7xl md:text-9xl leading-none mb-5 select-none">
+        <span class="forge-text">Forge</span><span class="mee-text text-purple-400">Mee</span>
       </h1>
+
+      <div class="inline-flex items-center gap-1.5 bg-white/[0.04] border border-white/[0.08] rounded-full px-3.5 py-1 text-xs text-white/40 mb-10">
+        Curated by <a href="YOUR_PORTFOLIO_URL" target="_blank" rel="noopener noreferrer" class="text-purple-400/80 hover:text-purple-400 transition-colors">Eirini Ornithopoulou</a>
+      </div>
 
       <div class="text-white/45 text-xl md:text-2xl font-medium mb-1 select-none">Forge me into a</div>
       <div class="h-16 md:h-24 flex items-center justify-center overflow-hidden mb-12 select-none">
@@ -108,10 +107,15 @@
         </span>
       </div>
 
-      <p class="text-white/38 text-base md:text-lg max-w-lg mx-auto leading-relaxed mb-14">
-        A structured roadmap of the best free resources on the internet —
+      <p class="text-white/38 text-base md:text-lg max-w-lg mx-auto leading-relaxed mb-8">
+        A curated roadmap of free resources on the internet —
         from Python basics to production AI systems.
       </p>
+
+      <div id="hero-account-cta" class="mb-10 text-sm text-white/38">
+        <button id="hero-signup-btn" class="text-purple-400/70 hover:text-purple-400 transition-colors underline underline-offset-2 decoration-purple-400/30">Create a free account</button>
+        to track your progress across sessions.
+      </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
         <button class="track-cta group text-left p-5 rounded-2xl border border-blue-500/14 bg-blue-950/20 hover:bg-blue-950/35 hover:border-blue-500/32 transition-all duration-200" data-track="ds">
@@ -212,7 +216,7 @@
   <!-- ── FOOTER ─────────────────────────────────────────────────────────── -->
   <footer class="border-t border-white/[0.05] py-14 px-6">
     <div class="max-w-6xl mx-auto flex flex-col items-center gap-3 text-center">
-      <div class="font-black text-xl">Forge<span class="text-purple-400">Mee</span></div>
+      <div class="text-2xl leading-none"><span class="forge-text">Forge</span><span class="mee-text text-purple-400">Mee</span></div>
       <p class="text-white/22 text-sm max-w-sm leading-relaxed">
         All resources are free or have a substantial free tier.<br>No affiliations or sponsorships.
       </p>
@@ -457,6 +461,7 @@
       const userInfo     = document.getElementById('user-info');
       const emailEl      = document.getElementById('user-email-display');
       const signinPrompt = document.getElementById('progress-signin-btn');
+      const heroCta      = document.getElementById('hero-account-cta');
 
       if (currentUser) {
         authBtn.classList.add('hidden');
@@ -464,16 +469,18 @@
         userInfo.style.display = 'flex';
         emailEl.textContent = currentUser.email;
         signinPrompt?.classList.add('hidden');
+        heroCta?.classList.add('hidden');
       } else {
         authBtn.classList.remove('hidden');
         userInfo.classList.add('hidden');
         signinPrompt?.classList.remove('hidden');
+        heroCta?.classList.remove('hidden');
       }
     }
 
     // ── Auth modal ──────────────────────────────────────────────────────
     function showAuthModal(tab = 'signin') {
-      if (!SUPABASE_READY) return;
+      if (!FIREBASE_READY) return;
       document.getElementById('auth-modal').classList.remove('hidden');
       setAuthTab(tab);
     }
@@ -626,6 +633,7 @@
       document.getElementById('clear-track').addEventListener('click', () => applyTrack('all'));
 
       document.getElementById('auth-open-btn').addEventListener('click', () => showAuthModal('signin'));
+      document.getElementById('hero-signup-btn')?.addEventListener('click', () => showAuthModal('signup'));
       document.getElementById('auth-close-btn').addEventListener('click', hideAuthModal);
       document.getElementById('auth-backdrop').addEventListener('click', hideAuthModal);
       document.querySelectorAll('.auth-tab-btn').forEach(btn =>
