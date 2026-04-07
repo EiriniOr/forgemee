@@ -6,74 +6,99 @@
   <title>ForgeMee — Become an AI Engineer, Data Scientist, or ML Engineer</title>
   <meta name="description" content="Curated free resources to become an AI Engineer, Data Scientist, or ML Engineer — structured from foundations to production expertise.">
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Custom styles -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-[#080810] text-white min-h-screen antialiased overflow-x-hidden">
 
-  <!-- ────────────────────────────────────────────────────────────────────
-       NAV (hidden until hero scrolls away)
-  ──────────────────────────────────────────────────────────────────────── -->
+  <!-- ── AUTH MODAL ──────────────────────────────────────────────────────── -->
+  <div id="auth-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
+    <div id="auth-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    <div class="auth-panel relative z-10 w-full max-w-sm">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex gap-1 bg-white/[0.04] rounded-xl p-1">
+          <button class="auth-tab-btn" data-tab="signin">Sign in</button>
+          <button class="auth-tab-btn" data-tab="signup">Sign up</button>
+        </div>
+        <button id="auth-close-btn" class="text-white/25 hover:text-white/70 transition text-xl leading-none p-1">✕</button>
+      </div>
+      <form id="auth-form" data-mode="signin" novalidate>
+        <div class="space-y-3 mb-4">
+          <input id="auth-email" type="email" placeholder="Email" autocomplete="email"
+            class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/25 focus:outline-none focus:border-purple-500/50 transition">
+          <input id="auth-password" type="password" placeholder="Password (min. 6 characters)" autocomplete="current-password"
+            class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/25 focus:outline-none focus:border-purple-500/50 transition">
+        </div>
+        <p id="auth-message" class="text-xs mb-3 hidden"></p>
+        <button id="auth-submit-btn" type="submit"
+          class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white text-sm font-semibold transition">
+          Sign in
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ── NAV ────────────────────────────────────────────────────────────── -->
   <nav id="main-nav" class="nav-hidden fixed top-0 left-0 right-0 z-50 bg-[#080810]/90 border-b border-white/[0.06] backdrop-blur-xl">
-    <div class="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between gap-4">
+    <div class="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between gap-3">
       <a href="#hero" class="font-black text-lg tracking-tight flex-shrink-0">
         Forge<span class="text-purple-400">Mee</span>
       </a>
-      <div class="flex gap-1.5 flex-wrap justify-end">
-        <button class="track-btn text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 hover:text-white" data-track="all">
-          <span class="track-btn-long">All tracks</span>
-          <span class="track-btn-short">All</span>
+      <div class="flex items-center gap-2 flex-wrap justify-end">
+        <div class="flex gap-1.5">
+          <button class="track-btn text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 hover:text-white" data-track="all">
+            <span class="track-btn-long">All tracks</span><span class="track-btn-short">All</span>
+          </button>
+          <button class="track-btn text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 hover:text-white" data-track="ds">
+            <span class="track-btn-long">Data Scientist</span><span class="track-btn-short">DS</span>
+          </button>
+          <button class="track-btn text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 hover:text-white" data-track="ml">
+            <span class="track-btn-long">ML Engineer</span><span class="track-btn-short">ML</span>
+          </button>
+          <button class="track-btn text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 hover:text-white" data-track="ai">
+            <span class="track-btn-long">AI Engineer</span><span class="track-btn-short">AI</span>
+          </button>
+        </div>
+        <div class="h-4 w-px bg-white/10 hidden sm:block mx-0.5"></div>
+        <button id="auth-open-btn"
+          class="text-xs px-3 py-1.5 rounded-full border border-purple-500/25 text-purple-300/70 hover:text-purple-300 hover:border-purple-500/45 transition">
+          Sign in
         </button>
-        <button class="track-btn text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 hover:text-white" data-track="ds">
-          <span class="track-btn-long">Data Scientist</span>
-          <span class="track-btn-short">DS</span>
-        </button>
-        <button class="track-btn text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 hover:text-white" data-track="ml">
-          <span class="track-btn-long">ML Engineer</span>
-          <span class="track-btn-short">ML</span>
-        </button>
-        <button class="track-btn text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 hover:text-white" data-track="ai">
-          <span class="track-btn-long">AI Engineer</span>
-          <span class="track-btn-short">AI</span>
-        </button>
+        <div id="user-info" class="hidden items-center gap-2">
+          <span id="user-email-display" class="text-xs text-white/35 max-w-[110px] truncate hidden sm:inline"></span>
+          <button id="signout-btn"
+            class="text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/40 hover:text-white transition">
+            Sign out
+          </button>
+        </div>
       </div>
     </div>
   </nav>
 
 
-  <!-- ────────────────────────────────────────────────────────────────────
-       HERO
-  ──────────────────────────────────────────────────────────────────────── -->
+  <!-- ── HERO ───────────────────────────────────────────────────────────── -->
   <section id="hero" class="hero-bg hero-grid relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 py-24">
-
-    <!-- Orbs -->
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
 
-    <!-- Content -->
     <div class="relative z-10 text-center w-full max-w-4xl mx-auto flex flex-col items-center">
 
-      <!-- Pill badge -->
       <div class="inline-flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-white/40 mb-10">
         <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse inline-block"></span>
         Free resources only &middot; Curated 2025
       </div>
 
-      <!-- Wordmark -->
       <h1 class="text-7xl md:text-9xl font-black tracking-tight leading-none mb-8 select-none">
         Forge<span class="text-purple-400">Mee</span>
       </h1>
 
-      <!-- Cycling headline -->
       <div class="text-white/45 text-xl md:text-2xl font-medium mb-1 select-none">Forge me into a</div>
       <div class="h-16 md:h-24 flex items-center justify-center overflow-hidden mb-12 select-none">
         <span id="cycle-text"
@@ -81,43 +106,33 @@
         </span>
       </div>
 
-      <!-- Subheading -->
       <p class="text-white/38 text-base md:text-lg max-w-lg mx-auto leading-relaxed mb-14">
         A structured roadmap of the best free resources on the internet —
         from Python basics to production AI systems.
       </p>
 
-      <!-- Track picker cards -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
-
-        <button class="track-cta group text-left p-5 rounded-2xl border border-blue-500/14 bg-blue-950/20
-                        hover:bg-blue-950/35 hover:border-blue-500/32 transition-all duration-200" data-track="ds">
+        <button class="track-cta group text-left p-5 rounded-2xl border border-blue-500/14 bg-blue-950/20 hover:bg-blue-950/35 hover:border-blue-500/32 transition-all duration-200" data-track="ds">
           <div class="text-2xl mb-3">📊</div>
           <div class="font-bold text-blue-300 text-base mb-1">Data Scientist</div>
           <div class="text-xs text-white/32 leading-relaxed">Stats · Python · ML · Analysis</div>
           <div class="mt-4 text-xs text-blue-500/45 group-hover:text-blue-400 transition-colors">Start this track →</div>
         </button>
-
-        <button class="track-cta group text-left p-5 rounded-2xl border border-violet-500/14 bg-violet-950/20
-                        hover:bg-violet-950/35 hover:border-violet-500/32 transition-all duration-200" data-track="ml">
+        <button class="track-cta group text-left p-5 rounded-2xl border border-violet-500/14 bg-violet-950/20 hover:bg-violet-950/35 hover:border-violet-500/32 transition-all duration-200" data-track="ml">
           <div class="text-2xl mb-3">🧠</div>
           <div class="font-bold text-violet-300 text-base mb-1">ML Engineer</div>
           <div class="text-xs text-white/32 leading-relaxed">Deep Learning · PyTorch · Systems</div>
           <div class="mt-4 text-xs text-violet-500/45 group-hover:text-violet-400 transition-colors">Start this track →</div>
         </button>
-
-        <button class="track-cta group text-left p-5 rounded-2xl border border-pink-500/14 bg-pink-950/20
-                        hover:bg-pink-950/35 hover:border-pink-500/32 transition-all duration-200" data-track="ai">
+        <button class="track-cta group text-left p-5 rounded-2xl border border-pink-500/14 bg-pink-950/20 hover:bg-pink-950/35 hover:border-pink-500/32 transition-all duration-200" data-track="ai">
           <div class="text-2xl mb-3">⚡</div>
           <div class="font-bold text-pink-300 text-base mb-1">AI Engineer</div>
           <div class="text-xs text-white/32 leading-relaxed">LLMs · RAG · Agents · Prompting</div>
           <div class="mt-4 text-xs text-pink-500/45 group-hover:text-pink-400 transition-colors">Start this track →</div>
         </button>
-
       </div>
     </div>
 
-    <!-- Scroll indicator -->
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-white/18 text-[11px] tracking-widest uppercase">
       <span>scroll</span>
       <svg class="w-3.5 h-3.5 animate-bounce mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,10 +142,55 @@
   </section>
 
 
-  <!-- ────────────────────────────────────────────────────────────────────
-       ROADMAP
-  ──────────────────────────────────────────────────────────────────────── -->
+  <!-- ── ROADMAP ────────────────────────────────────────────────────────── -->
   <main id="roadmap" class="max-w-6xl mx-auto px-5 pt-20 pb-28">
+
+    <!-- Progress bars -->
+    <div id="progress-section" class="mb-16 p-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] fade-in-up">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xs font-bold text-white/30 uppercase tracking-[0.15em]">Your Progress</h2>
+        <button id="progress-signin-btn"
+          class="text-xs text-purple-400/55 hover:text-purple-400 transition-colors">
+          Sign in to track →
+        </button>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+
+        <div class="progress-track" data-track="ds">
+          <div class="flex items-center justify-between mb-2.5">
+            <span class="text-sm font-semibold text-blue-300/80">📊 Data Scientist</span>
+            <span class="progress-count text-xs text-white/28 tabular-nums font-medium">0 / 0</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill bg-blue-500" style="width:0%"></div>
+          </div>
+          <div class="progress-pct text-[10px] text-white/22 mt-1.5 tabular-nums">0%</div>
+        </div>
+
+        <div class="progress-track" data-track="ml">
+          <div class="flex items-center justify-between mb-2.5">
+            <span class="text-sm font-semibold text-violet-300/80">🧠 ML Engineer</span>
+            <span class="progress-count text-xs text-white/28 tabular-nums font-medium">0 / 0</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill bg-violet-500" style="width:0%"></div>
+          </div>
+          <div class="progress-pct text-[10px] text-white/22 mt-1.5 tabular-nums">0%</div>
+        </div>
+
+        <div class="progress-track" data-track="ai">
+          <div class="flex items-center justify-between mb-2.5">
+            <span class="text-sm font-semibold text-pink-300/80">⚡ AI Engineer</span>
+            <span class="progress-count text-xs text-white/28 tabular-nums font-medium">0 / 0</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill bg-pink-500" style="width:0%"></div>
+          </div>
+          <div class="progress-pct text-[10px] text-white/22 mt-1.5 tabular-nums">0%</div>
+        </div>
+
+      </div>
+    </div>
 
     <!-- Active-track banner -->
     <div id="track-banner" class="text-center mb-14 hidden">
@@ -141,15 +201,13 @@
       </div>
     </div>
 
-    <!-- Phases injected here -->
+    <!-- Phases -->
     <div id="phases"></div>
 
   </main>
 
 
-  <!-- ────────────────────────────────────────────────────────────────────
-       FOOTER
-  ──────────────────────────────────────────────────────────────────────── -->
+  <!-- ── FOOTER ─────────────────────────────────────────────────────────── -->
   <footer class="border-t border-white/[0.05] py-14 px-6">
     <div class="max-w-6xl mx-auto flex flex-col items-center gap-3 text-center">
       <div class="font-black text-xl">Forge<span class="text-purple-400">Mee</span></div>
@@ -160,86 +218,74 @@
   </footer>
 
 
-  <!-- ────────────────────────────────────────────────────────────────────
-       DATA + APP SCRIPT
-  ──────────────────────────────────────────────────────────────────────── -->
   <script src="resources.js"></script>
   <script>
   (function () {
 
-    // ── Phase metadata ─────────────────────────────────────────────────
+    // ── Supabase config ─────────────────────────────────────────────────
+    // TODO: replace both values after creating your Supabase project
+    //   Project Settings → API → Project URL  +  anon/public key
+    const SUPABASE_URL      = 'YOUR_PROJECT_URL';
+    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+
+    const SUPABASE_READY = !SUPABASE_URL.startsWith('YOUR_');
+    const sb = SUPABASE_READY
+      ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
+    // ── App state ───────────────────────────────────────────────────────
+    let currentUser  = null;
+    let completedSet = new Set();
+
+    // ── Phase metadata ──────────────────────────────────────────────────
     const PHASES = [
-      {
-        id: 0,
-        label: '00',
-        title: 'Foundations',
-        subtitle: 'Python programming and essential mathematics — the bedrock everything else is built on.',
-      },
-      {
-        id: 1,
-        label: '01',
-        title: 'Core ML & Data Science',
-        subtitle: 'Classical algorithms, data manipulation, and statistical thinking.',
-      },
-      {
-        id: 2,
-        label: '02',
-        title: 'Deep Learning',
-        subtitle: 'Neural networks from intuition to implementation — vision, NLP, transformers.',
-      },
-      {
-        id: 3,
-        label: '03',
-        title: 'AI Engineering',
-        subtitle: 'LLMs, RAG pipelines, prompt engineering, and production agent systems.',
-      },
-      {
-        id: 4,
-        label: '∞',
-        title: 'Practice & Projects',
-        subtitle: 'Build a portfolio, compete in challenges, and stay current with the field.',
-      },
+      { id: 0, label: '00', title: 'Foundations',           subtitle: 'Python programming and essential mathematics — the bedrock everything else is built on.' },
+      { id: 1, label: '01', title: 'Core ML & Data Science', subtitle: 'Classical algorithms, data manipulation, and statistical thinking.' },
+      { id: 2, label: '02', title: 'Deep Learning',          subtitle: 'Neural networks from intuition to implementation — vision, NLP, transformers.' },
+      { id: 3, label: '03', title: 'AI Engineering',         subtitle: 'LLMs, RAG pipelines, prompt engineering, and production agent systems.' },
+      { id: 4, label: '∞',  title: 'Practice & Projects',    subtitle: 'Build a portfolio, compete in challenges, and stay current with the field.' },
     ];
 
-    // ── Lookup maps ────────────────────────────────────────────────────
     const TYPE_ICON  = { course: '🎓', book: '📖', youtube: '🎥', platform: '🏆', guide: '📋' };
     const TYPE_LABEL = { course: 'Course', book: 'Book', youtube: 'YouTube', platform: 'Platform', guide: 'Guide' };
-
-    const LEVEL_CLS = {
+    const LEVEL_CLS  = {
       beginner:     'text-emerald-400 bg-emerald-400/10',
       intermediate: 'text-amber-400  bg-amber-400/10',
       advanced:     'text-red-400    bg-red-400/10',
     };
-
     const TRACK_TAG_CLS = {
       ds: 'bg-blue-500/10   text-blue-400   border border-blue-500/18',
       ml: 'bg-violet-500/10 text-violet-400 border border-violet-500/18',
       ai: 'bg-pink-500/10   text-pink-400   border border-pink-500/18',
     };
-    const TRACK_SHORT = { ds: 'DS', ml: 'ML', ai: 'AI' };
-
+    const TRACK_SHORT       = { ds: 'DS', ml: 'ML', ai: 'AI' };
     const TRACK_BANNER_HTML = {
       ds: '<span class="text-blue-400">Data Scientist</span> track',
       ml: '<span class="text-violet-400">ML Engineer</span> track',
       ai: '<span class="text-pink-400">AI Engineer</span> track',
     };
 
-    // ── Build a card ────────────────────────────────────────────────────
+    // ── Card builder ────────────────────────────────────────────────────
     function buildCard(r) {
       const primary = r.tracks[0];
       const tags = r.tracks
         .map(t => `<span class="text-[11px] px-2 py-0.5 rounded-full ${TRACK_TAG_CLS[t]}">${TRACK_SHORT[t]}</span>`)
         .join('');
 
-      const el = document.createElement('a');
-      el.href = r.url;
-      el.target = '_blank';
-      el.rel = 'noopener noreferrer';
-      el.className = `resource-card glow-${primary} rounded-2xl p-5`;
-      el.dataset.tracks = r.tracks.join(',');
+      // Wrapper — grid item; also used for filtering + completion state
+      const wrapper = document.createElement('div');
+      wrapper.className = 'resource-card-wrapper';
+      wrapper.dataset.tracks = r.tracks.join(',');
 
+      // Card link
+      const el = document.createElement('a');
+      el.href   = r.url;
+      el.target = '_blank';
+      el.rel    = 'noopener noreferrer';
+      el.className       = `resource-card glow-${primary} rounded-2xl p-5 flex-1`;
+      el.dataset.resourceId = r.id;
       el.innerHTML = `
-        <div class="flex items-start justify-between gap-2 mb-3">
+        <div class="flex items-start justify-between gap-8 mb-3">
           <div class="w-9 h-9 rounded-xl bg-white/[0.05] flex items-center justify-center text-lg flex-shrink-0">
             ${TYPE_ICON[r.type]}
           </div>
@@ -255,10 +301,26 @@
           <span class="text-[11px] text-white/22 flex-shrink-0 ml-2">Open ↗</span>
         </div>`;
 
-      return el;
+      // Completion checkbox button (overlaid top-right)
+      const checkBtn = document.createElement('button');
+      checkBtn.className = 'resource-check-btn';
+      checkBtn.dataset.id = r.id;
+      checkBtn.setAttribute('aria-label', 'Mark as completed');
+      checkBtn.innerHTML = `<svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="1.5,6 4.5,9.5 10.5,2.5"/>
+      </svg>`;
+      checkBtn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleResource(r.id);
+      });
+
+      wrapper.appendChild(el);
+      wrapper.appendChild(checkBtn);
+      return wrapper;
     }
 
-    // ── Build a card grid ───────────────────────────────────────────────
     function buildGrid(resources) {
       const grid = document.createElement('div');
       grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
@@ -266,24 +328,23 @@
       return grid;
     }
 
-    // ── Render all phases ───────────────────────────────────────────────
+    // ── Phase renderer ──────────────────────────────────────────────────
     function renderPhases() {
       const container = document.getElementById('phases');
-
       PHASES.forEach((phase, pi) => {
         const items = RESOURCES.filter(r => r.phase === phase.id);
         if (!items.length) return;
 
         const section = document.createElement('section');
-        section.id = `phase-${phase.id}`;
+        section.id        = `phase-${phase.id}`;
         section.className = 'phase-section mb-20 fade-in-up';
         if (pi > 0) section.style.transitionDelay = `${pi * 0.06}s`;
 
-        // Header
         const header = document.createElement('div');
         header.className = 'flex items-center gap-4 mb-8';
         header.innerHTML = `
-          <div class="phase-badge w-11 h-11 rounded-xl flex items-center justify-center font-black text-purple-300/80 text-sm flex-shrink-0">
+          <div class="phase-badge w-11 h-11 rounded-xl flex items-center justify-center
+                      font-black text-purple-300/80 text-sm flex-shrink-0">
             ${phase.label}
           </div>
           <div>
@@ -292,29 +353,23 @@
           </div>`;
         section.appendChild(header);
 
-        // Phase 0 splits into Python / Math subgroups
         if (phase.id === 0) {
-          [
-            { key: 'python', label: 'Python' },
-            { key: 'math',   label: 'Mathematics' },
-          ].forEach(({ key, label }) => {
-            const sub = items.filter(r => r.subgroup === key);
-            if (!sub.length) return;
-
-            const wrap = document.createElement('div');
-            wrap.className = 'mb-8';
-
-            const sublabel = document.createElement('div');
-            sublabel.className = 'text-[10px] font-bold text-white/22 uppercase tracking-[0.15em] mb-4';
-            sublabel.textContent = label;
-            wrap.appendChild(sublabel);
-            wrap.appendChild(buildGrid(sub));
-            section.appendChild(wrap);
-          });
+          [{ key: 'python', label: 'Python' }, { key: 'math', label: 'Mathematics' }]
+            .forEach(({ key, label }) => {
+              const sub = items.filter(r => r.subgroup === key);
+              if (!sub.length) return;
+              const wrap = document.createElement('div');
+              wrap.className = 'mb-8';
+              const sublabel = document.createElement('div');
+              sublabel.className = 'text-[10px] font-bold text-white/22 uppercase tracking-[0.15em] mb-4';
+              sublabel.textContent = label;
+              wrap.appendChild(sublabel);
+              wrap.appendChild(buildGrid(sub));
+              section.appendChild(wrap);
+            });
         } else {
           section.appendChild(buildGrid(items));
         }
-
         container.appendChild(section);
       });
     }
@@ -324,27 +379,19 @@
 
     function applyTrack(track) {
       activeTrack = track;
-
-      // Update every track button
       document.querySelectorAll('.track-btn').forEach(btn => {
-        btn.classList.remove('is-active-all', 'is-active-ds', 'is-active-ml', 'is-active-ai');
+        btn.classList.remove('is-active-all','is-active-ds','is-active-ml','is-active-ai');
         if (btn.dataset.track === track) btn.classList.add(`is-active-${track}`);
       });
-
-      // Show/hide cards
-      document.querySelectorAll('.resource-card[data-tracks]').forEach(card => {
-        const tracks = card.dataset.tracks.split(',');
-        card.style.display = (track === 'all' || tracks.includes(track)) ? '' : 'none';
+      document.querySelectorAll('.resource-card-wrapper[data-tracks]').forEach(w => {
+        const tracks = w.dataset.tracks.split(',');
+        w.style.display = (track === 'all' || tracks.includes(track)) ? '' : 'none';
       });
-
-      // Hide phases that have no visible cards
       document.querySelectorAll('.phase-section').forEach(section => {
-        const anyVisible = [...section.querySelectorAll('.resource-card')]
+        const any = [...section.querySelectorAll('.resource-card-wrapper')]
           .some(c => c.style.display !== 'none');
-        section.style.display = anyVisible ? '' : 'none';
+        section.style.display = any ? '' : 'none';
       });
-
-      // Banner
       const banner = document.getElementById('track-banner');
       if (track === 'all') {
         banner.classList.add('hidden');
@@ -354,19 +401,175 @@
       }
     }
 
+    // ── Progress bars ───────────────────────────────────────────────────
+    function renderProgressBars() {
+      ['ds', 'ml', 'ai'].forEach(track => {
+        const all   = RESOURCES.filter(r => r.tracks.includes(track));
+        const total = all.length;
+        const done  = all.filter(r => completedSet.has(r.id)).length;
+        const pct   = total > 0 ? Math.round(done / total * 100) : 0;
+        const el    = document.querySelector(`.progress-track[data-track="${track}"]`);
+        if (!el) return;
+        el.querySelector('.progress-count').textContent      = `${done} / ${total}`;
+        el.querySelector('.progress-bar-fill').style.width   = `${pct}%`;
+        el.querySelector('.progress-pct').textContent        = `${pct}%`;
+      });
+    }
+
+    function renderCheckboxes() {
+      document.querySelectorAll('.resource-check-btn').forEach(btn => {
+        const done = completedSet.has(btn.dataset.id);
+        btn.classList.toggle('done', done);
+        btn.closest('.resource-card-wrapper').classList.toggle('completed', done);
+      });
+    }
+
+    // ── Auth state ──────────────────────────────────────────────────────
+    function renderAuthState() {
+      const authBtn      = document.getElementById('auth-open-btn');
+      const userInfo     = document.getElementById('user-info');
+      const emailEl      = document.getElementById('user-email-display');
+      const signinPrompt = document.getElementById('progress-signin-btn');
+
+      if (currentUser) {
+        authBtn.classList.add('hidden');
+        userInfo.classList.remove('hidden');
+        userInfo.style.display = 'flex';
+        emailEl.textContent = currentUser.email;
+        signinPrompt?.classList.add('hidden');
+      } else {
+        authBtn.classList.remove('hidden');
+        userInfo.classList.add('hidden');
+        signinPrompt?.classList.remove('hidden');
+      }
+    }
+
+    // ── Auth modal ──────────────────────────────────────────────────────
+    function showAuthModal(tab = 'signin') {
+      if (!SUPABASE_READY) return;
+      document.getElementById('auth-modal').classList.remove('hidden');
+      setAuthTab(tab);
+    }
+    function hideAuthModal() {
+      document.getElementById('auth-modal').classList.add('hidden');
+      const msg = document.getElementById('auth-message');
+      msg.classList.add('hidden');
+      msg.textContent = '';
+      document.getElementById('auth-email').value    = '';
+      document.getElementById('auth-password').value = '';
+    }
+    function setAuthTab(tab) {
+      document.querySelectorAll('.auth-tab-btn').forEach(btn =>
+        btn.classList.toggle('auth-tab-active', btn.dataset.tab === tab)
+      );
+      document.getElementById('auth-submit-btn').textContent =
+        tab === 'signin' ? 'Sign in' : 'Create account';
+      document.getElementById('auth-form').dataset.mode = tab;
+    }
+    async function submitAuth(e) {
+      e.preventDefault();
+      if (!sb) return;
+      const mode      = document.getElementById('auth-form').dataset.mode;
+      const email     = document.getElementById('auth-email').value.trim();
+      const password  = document.getElementById('auth-password').value;
+      const msgEl     = document.getElementById('auth-message');
+      const submitBtn = document.getElementById('auth-submit-btn');
+
+      msgEl.classList.add('hidden');
+      submitBtn.disabled    = true;
+      submitBtn.textContent = mode === 'signin' ? 'Signing in…' : 'Creating account…';
+
+      let error, data;
+      if (mode === 'signin') {
+        ({ error } = await sb.auth.signInWithPassword({ email, password }));
+      } else {
+        ({ data, error } = await sb.auth.signUp({ email, password }));
+      }
+
+      submitBtn.disabled    = false;
+      submitBtn.textContent = mode === 'signin' ? 'Sign in' : 'Create account';
+
+      if (error) {
+        msgEl.className = 'text-red-400 text-xs mb-3';
+        msgEl.textContent = error.message;
+        msgEl.classList.remove('hidden');
+      } else if (mode === 'signup' && data && !data.session) {
+        // Email confirmation required — let user know
+        msgEl.className = 'text-emerald-400 text-xs mb-3';
+        msgEl.textContent = 'Check your email to confirm your account.';
+        msgEl.classList.remove('hidden');
+      } else {
+        hideAuthModal();
+      }
+    }
+
+    // ── Supabase / progress ─────────────────────────────────────────────
+    async function loadProgress() {
+      if (!sb) return;
+      const { data, error } = await sb.from('user_progress').select('resource_id');
+      if (!error && data) completedSet = new Set(data.map(r => r.resource_id));
+    }
+
+    async function toggleResource(id) {
+      if (!currentUser) {
+        if (SUPABASE_READY) showAuthModal('signin');
+        return;
+      }
+      if (completedSet.has(id)) {
+        completedSet.delete(id);
+        await sb.from('user_progress')
+          .delete()
+          .eq('user_id', currentUser.id)
+          .eq('resource_id', id);
+      } else {
+        completedSet.add(id);
+        await sb.from('user_progress')
+          .upsert({ user_id: currentUser.id, resource_id: id });
+      }
+      renderCheckboxes();
+      renderProgressBars();
+    }
+
+    async function initAuth() {
+      if (!SUPABASE_READY) {
+        // Supabase not configured yet — hide auth UI gracefully
+        document.getElementById('auth-open-btn').classList.add('hidden');
+        document.getElementById('progress-signin-btn')?.classList.add('hidden');
+        return;
+      }
+      const { data: { session } } = await sb.auth.getSession();
+      if (session) {
+        currentUser = session.user;
+        await loadProgress();
+      }
+      renderAuthState();
+      renderCheckboxes();
+      renderProgressBars();
+
+      sb.auth.onAuthStateChange(async (_event, session) => {
+        currentUser = session?.user ?? null;
+        if (currentUser) {
+          await loadProgress();
+        } else {
+          completedSet.clear();
+        }
+        renderAuthState();
+        renderCheckboxes();
+        renderProgressBars();
+      });
+    }
+
     // ── Cycling hero text ───────────────────────────────────────────────
-    const WORDS = ['AI Engineer', 'Data Scientist', 'ML Engineer'];
-    let wordIdx = 0;
+    const WORDS   = ['AI Engineer', 'Data Scientist', 'ML Engineer'];
+    let wordIdx   = 0;
     const cycleEl = document.getElementById('cycle-text');
 
     function initCycle() {
       cycleEl.textContent = WORDS[0];
       cycleEl.classList.add('anim-in');
-
       setInterval(() => {
         cycleEl.classList.remove('anim-in');
         cycleEl.classList.add('anim-out');
-
         setTimeout(() => {
           wordIdx = (wordIdx + 1) % WORDS.length;
           cycleEl.textContent = WORDS[wordIdx];
@@ -395,32 +598,41 @@
       document.querySelectorAll('.fade-in-up').forEach(el => io.observe(el));
     }
 
-    // ── Wire events ─────────────────────────────────────────────────────
+    // ── Events ──────────────────────────────────────────────────────────
     function initEvents() {
-      // Nav track buttons
-      document.querySelectorAll('.track-btn').forEach(btn => {
-        btn.addEventListener('click', () => applyTrack(btn.dataset.track));
-      });
-
-      // Hero track CTA cards
-      document.querySelectorAll('.track-cta').forEach(btn => {
+      document.querySelectorAll('.track-btn').forEach(btn =>
+        btn.addEventListener('click', () => applyTrack(btn.dataset.track))
+      );
+      document.querySelectorAll('.track-cta').forEach(btn =>
         btn.addEventListener('click', () => {
           applyTrack(btn.dataset.track);
           document.getElementById('roadmap').scrollIntoView({ behavior: 'smooth' });
-        });
-      });
-
-      // Clear banner
+        })
+      );
       document.getElementById('clear-track').addEventListener('click', () => applyTrack('all'));
+
+      document.getElementById('auth-open-btn').addEventListener('click', () => showAuthModal('signin'));
+      document.getElementById('auth-close-btn').addEventListener('click', hideAuthModal);
+      document.getElementById('auth-backdrop').addEventListener('click', hideAuthModal);
+      document.querySelectorAll('.auth-tab-btn').forEach(btn =>
+        btn.addEventListener('click', () => setAuthTab(btn.dataset.tab))
+      );
+      document.getElementById('auth-form').addEventListener('submit', submitAuth);
+      document.getElementById('signout-btn').addEventListener('click', () => sb?.auth.signOut());
+      document.getElementById('progress-signin-btn')
+        ?.addEventListener('click', () => showAuthModal('signup'));
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') hideAuthModal(); });
     }
 
     // ── Boot ────────────────────────────────────────────────────────────
     renderPhases();
+    renderProgressBars(); // show correct totals (0/N) immediately
     initCycle();
     initNav();
     initFadeIn();
     initEvents();
     applyTrack('all');
+    initAuth();           // async: loads session + syncs progress from Supabase
 
   })();
   </script>
