@@ -44,6 +44,18 @@ const RESOURCES = [
     phase: 0,
     subgroup: 'python',
   },
+  {
+    id: 'arjancodes-software-design',
+    name: 'Software Design in Python — ArjanCodes',
+    description: 'Playlist covering SOLID principles, design patterns, dependency injection, and clean architecture in Python. Teaches how to write production-quality, maintainable code — not just scripts.',
+    url: 'https://www.youtube.com/playlist?list=PLC0nd42SBTaNuP4iB4L6SJlMaHE71FG6N',
+    type: 'youtube',
+    level: 'intermediate',
+    tracks: ['ds', 'ml', 'ai'],
+    phase: 0,
+    subgroup: 'python',
+    optional: true,
+  },
 
   // ── Phase 0 · Mathematics ───────────────────────────────────────────────
   {
