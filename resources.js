@@ -159,12 +159,12 @@ const RESOURCES = [
   {
     id: 'fastai-book',
     name: 'fast.ai — Deep Learning for Coders (Book)',
-    description: 'Free companion textbook to the fast.ai course. Deep dives into vision, NLP, tabular, and collaborative filtering.',
+    description: 'Free companion textbook to the fast.ai course. Goes deeper on vision, NLP, tabular, and collaborative filtering — a genuine reference to return to.',
     url: 'https://fastai.github.io/fastbook2e/',
     type: 'book',
     level: 'intermediate',
     tracks: ['ml', 'ai'],
-    phase: 2,
+    phase: 5,
   },
   {
     id: 'dlai-dl-spec',
@@ -261,15 +261,17 @@ const RESOURCES = [
     tracks: ['ml'],
     phase: 4,
   },
+
+  // ── Phase 5 · Reading List ───────────────────────────────────────────────
   {
-    id: 'two-minute',
-    name: 'Two Minute Papers',
-    description: 'Latest AI research papers distilled into 5–10 minute videos. The best way to stay current without reading full papers.',
-    url: 'https://www.youtube.com/@TwoMinutePapers',
-    type: 'youtube',
+    id: 'ai-digest',
+    name: 'AI Weekly Digest — by Eirini Ornithopoulou',
+    description: 'A weekly curated digest of the most important agentic AI news from arXiv, Hacker News, and Reddit — summarised and audio-narrated by AI. Published every Sunday. Stay current with the field without the noise.',
+    url: 'https://EiriniOr.github.io/ai-weekly-digest/',
+    type: 'guide',
     level: 'advanced',
     tracks: ['ds', 'ml', 'ai'],
-    phase: 4,
+    phase: 5,
   },
 
 ];

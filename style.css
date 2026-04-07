@@ -173,6 +173,13 @@
   );
 }
 
+/* ── Celebration modal ──────────────────────────────────────────────────── */
+.celebration-panel {
+  background: #0d0d20;
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  border-radius: 24px;
+}
+
 /* ── Auth modal ─────────────────────────────────────────────────────────── */
 .auth-panel {
   background: #0d0d20;

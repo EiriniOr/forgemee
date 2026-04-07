@@ -11,12 +11,42 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Pacifico&display=swap" rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-[#080810] text-white min-h-screen antialiased overflow-x-hidden">
+
+  <!-- ── CELEBRATION MODAL ────────────────────────────────────────────────── -->
+  <div id="celebration-modal" class="hidden fixed inset-0 z-[250] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
+    <div class="celebration-panel relative z-10 w-full max-w-sm text-center px-8 py-10">
+      <div class="text-5xl mb-6 select-none">🎉</div>
+      <div class="text-[10px] font-bold text-white/25 uppercase tracking-[0.22em] mb-3">Track Complete</div>
+      <h2 class="text-2xl font-black text-white mb-2">Congratulations!</h2>
+      <p class="text-white/45 text-sm mb-2">You've completed all courses on the</p>
+      <div id="celebration-track-name" class="text-3xl font-black mb-1 text-purple-400">Track</div>
+      <p class="text-white/25 text-sm mb-7">path</p>
+      <p class="text-white/22 text-xs leading-relaxed mb-8 px-1">
+        As per the honour code of self-tracking — this is your achievement,
+        earned through curiosity, consistency, and commitment.
+      </p>
+      <div class="flex flex-col gap-3">
+        <button id="celebration-download-btn"
+          class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold text-sm transition">
+          ↓ &nbsp;Download Certificate
+        </button>
+        <button id="celebration-close-btn"
+          class="w-full py-2.5 rounded-xl border border-white/10 text-white/35 hover:text-white/70 text-sm transition">
+          Continue →
+        </button>
+      </div>
+    </div>
+  </div>
+
 
   <!-- ── AUTH MODAL ──────────────────────────────────────────────────────── -->
   <div id="auth-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
@@ -165,7 +195,10 @@
         <div class="progress-track" data-track="ds">
           <div class="flex items-center justify-between mb-2.5">
             <span class="text-sm font-semibold text-blue-300/80">📊 Data Scientist</span>
-            <span class="progress-count text-xs text-white/28 tabular-nums font-medium">0 / 0</span>
+            <div class="flex items-center gap-2.5">
+              <span class="progress-count text-xs text-white/28 tabular-nums font-medium">0 / 0</span>
+              <button class="cert-dl-btn hidden text-[11px] text-blue-400/55 hover:text-blue-400 transition-colors" data-track="ds">🏆 Certificate</button>
+            </div>
           </div>
           <div class="progress-bar-bg">
             <div class="progress-bar-fill bg-blue-500" style="width:0%"></div>
@@ -176,7 +209,10 @@
         <div class="progress-track" data-track="ml">
           <div class="flex items-center justify-between mb-2.5">
             <span class="text-sm font-semibold text-violet-300/80">🧠 ML Engineer</span>
-            <span class="progress-count text-xs text-white/28 tabular-nums font-medium">0 / 0</span>
+            <div class="flex items-center gap-2.5">
+              <span class="progress-count text-xs text-white/28 tabular-nums font-medium">0 / 0</span>
+              <button class="cert-dl-btn hidden text-[11px] text-violet-400/55 hover:text-violet-400 transition-colors" data-track="ml">🏆 Certificate</button>
+            </div>
           </div>
           <div class="progress-bar-bg">
             <div class="progress-bar-fill bg-violet-500" style="width:0%"></div>
@@ -187,7 +223,10 @@
         <div class="progress-track" data-track="ai">
           <div class="flex items-center justify-between mb-2.5">
             <span class="text-sm font-semibold text-pink-300/80">⚡ AI Engineer</span>
-            <span class="progress-count text-xs text-white/28 tabular-nums font-medium">0 / 0</span>
+            <div class="flex items-center gap-2.5">
+              <span class="progress-count text-xs text-white/28 tabular-nums font-medium">0 / 0</span>
+              <button class="cert-dl-btn hidden text-[11px] text-pink-400/55 hover:text-pink-400 transition-colors" data-track="ai">🏆 Certificate</button>
+            </div>
           </div>
           <div class="progress-bar-bg">
             <div class="progress-bar-fill bg-pink-500" style="width:0%"></div>
@@ -265,8 +304,10 @@
     }
 
     // ── App state ───────────────────────────────────────────────────────
-    let currentUser  = null;
-    let completedSet = new Set();
+    let currentUser      = null;
+    let completedSet     = new Set();
+    let certificatesEarned = {};   // { ds: ISO_date, ml: ISO_date, ai: ISO_date }
+    let celebrationTrack   = null;
 
     // ── Phase metadata ──────────────────────────────────────────────────
     const PHASES = [
@@ -274,7 +315,8 @@
       { id: 1, label: '01', title: 'Core ML & Data Science', subtitle: 'Classical algorithms, data manipulation, and statistical thinking.' },
       { id: 2, label: '02', title: 'Deep Learning',          subtitle: 'Neural networks from intuition to implementation — vision, NLP, transformers.' },
       { id: 3, label: '03', title: 'AI Engineering',         subtitle: 'LLMs, RAG pipelines, prompt engineering, and production agent systems.' },
-      { id: 4, label: '∞',  title: 'Practice & Projects',    subtitle: 'Build a portfolio, compete in challenges, and stay current with the field.' },
+      { id: 4, label: '∞',  title: 'Practice & Projects',    subtitle: 'Build a portfolio, compete in challenges, and sharpen your skills.' },
+      { id: 5, label: '📚', title: 'Reading List',            subtitle: 'Books and curated feeds to go deeper and stay current with the field.' },
     ];
 
     const TYPE_ICON  = { course: '🎓', book: '📖', youtube: '🎥', platform: '🏆', guide: '📋' };
@@ -493,6 +535,8 @@
         el.querySelector('.progress-count').textContent      = `${done} / ${total}`;
         el.querySelector('.progress-bar-fill').style.width   = `${pct}%`;
         el.querySelector('.progress-pct').textContent        = `${pct}%`;
+        const showCert = (done === total && total > 0) || !!certificatesEarned[track];
+        el.querySelector('.cert-dl-btn')?.classList.toggle('hidden', !showCert);
       });
     }
 
@@ -501,6 +545,180 @@
         const done = completedSet.has(btn.dataset.id);
         btn.classList.toggle('done', done);
         btn.closest('.resource-card-wrapper').classList.toggle('completed', done);
+      });
+    }
+
+    // ── Certificate PDF ──────────────────────────────────────────────────
+    function generateCertificate(track) {
+      if (!window.jspdf) { alert('PDF library not loaded — check your connection and try again.'); return; }
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const W = 210, H = 297, cx = W / 2;
+
+      const NAMES  = { ds: 'Data Scientist', ml: 'ML Engineer', ai: 'AI Engineer' };
+      const COLORS = { ds: [59, 130, 246], ml: [139, 92, 246], ai: [236, 72, 153] };
+      const [cr, cg, cb] = COLORS[track];
+      const trackName = NAMES[track];
+      const certDate  = certificatesEarned[track]
+        ? new Date(certificatesEarned[track]).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
+        : new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+      const ct = (t, y) => doc.text(t, cx, y, { align: 'center' });
+      const dk = (v, f) => Math.round(v * f);
+
+      // Background
+      doc.setFillColor(8, 8, 16);
+      doc.rect(0, 0, W, H, 'F');
+
+      // Top stripe
+      doc.setFillColor(cr, cg, cb);
+      doc.rect(0, 0, W, 2.5, 'F');
+
+      // Inner border (double)
+      doc.setDrawColor(dk(cr,.5), dk(cg,.5), dk(cb,.5));
+      doc.setLineWidth(0.45);
+      doc.rect(13, 13, W - 26, H - 26);
+      doc.setDrawColor(dk(cr,.22), dk(cg,.22), dk(cb,.22));
+      doc.setLineWidth(0.15);
+      doc.rect(15.5, 15.5, W - 31, H - 31);
+
+      // Wordmark: FORGE (bold white) + mee (normal purple)
+      doc.setFontSize(30);
+      doc.setFont('helvetica', 'bold');
+      const fw = doc.getTextWidth('FORGE');
+      doc.setFont('helvetica', 'normal');
+      const mw = doc.getTextWidth('mee');
+      const wx = (W - fw - mw) / 2;
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(255, 255, 255);
+      doc.text('FORGE', wx, 44);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(167, 139, 250);
+      doc.text('mee', wx + fw, 44);
+
+      // Divider under wordmark
+      doc.setDrawColor(dk(cr,.6), dk(cg,.6), dk(cb,.6));
+      doc.setLineWidth(0.25);
+      doc.line(cx - 22, 49.5, cx + 22, 49.5);
+
+      // "Certificate of completion"
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(6.5);
+      doc.setTextColor(95, 95, 115);
+      ct('C E R T I F I C A T E   O F   C O M P L E T I O N', 59.5);
+
+      // "Congratulations!"
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(22);
+      doc.setTextColor(232, 232, 248);
+      ct('Congratulations!', 85);
+
+      // Intro lines
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9.5);
+      doc.setTextColor(140, 140, 162);
+      ct('You have completed all suggested courses on the', 99);
+
+      // Track name — large, coloured
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(34);
+      doc.setTextColor(cr, cg, cb);
+      ct(trackName.toUpperCase(), 122);
+
+      // "path"
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(12);
+      doc.setTextColor(150, 150, 172);
+      ct('path', 134);
+
+      // Centre divider
+      doc.setDrawColor(48, 48, 64);
+      doc.setLineWidth(0.2);
+      doc.line(cx - 44, 144, cx + 44, 144);
+
+      // Honour code
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(8);
+      doc.setTextColor(90, 90, 110);
+      ct('( as per the honour code of self-tracking )', 155);
+
+      // Body copy
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(118, 118, 140);
+      ct('A curated journey from Python foundations', 173);
+      ct('to production AI systems.', 181);
+
+      // Curated by
+      doc.setFontSize(8);
+      doc.setTextColor(88, 88, 108);
+      ct('Curated by Eirini Ornithopoulou \u00B7 2026', 193);
+
+      // Bottom rule
+      doc.setDrawColor(44, 44, 60);
+      doc.setLineWidth(0.15);
+      doc.line(cx - 54, 215, cx + 54, 215);
+
+      // Date
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(138, 138, 160);
+      ct('Completed on: ' + certDate, 226);
+
+      // URL
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(dk(cr,.65), dk(cg,.65), dk(cb,.65));
+      ct('forgemee.vercel.app', 238);
+
+      doc.save('ForgeMee-' + track + '-certificate.pdf');
+    }
+
+    // ── Confetti + celebration ─────────────────────────────────────────────
+    function fireConfetti() {
+      if (!window.confetti) return;
+      const base = { particleCount: 90, spread: 70, startVelocity: 35 };
+      window.confetti({ ...base, origin: { x: 0.2, y: 0.65 } });
+      setTimeout(() => window.confetti({ ...base, origin: { x: 0.8, y: 0.65 } }), 300);
+      setTimeout(() => window.confetti({ ...base, spread: 100, origin: { x: 0.5, y: 0.4 } }), 600);
+    }
+
+    function triggerCelebration(track) {
+      const NAMES  = { ds: 'Data Scientist', ml: 'ML Engineer', ai: 'AI Engineer' };
+      const COLORS = { ds: 'text-blue-400', ml: 'text-violet-400', ai: 'text-pink-400' };
+      celebrationTrack = track;
+      const nameEl = document.getElementById('celebration-track-name');
+      nameEl.textContent = NAMES[track];
+      nameEl.className   = `text-3xl font-black mb-1 ${COLORS[track]}`;
+      document.getElementById('celebration-modal').classList.remove('hidden');
+      fireConfetti();
+    }
+
+    function hideCelebration() {
+      document.getElementById('celebration-modal').classList.add('hidden');
+      celebrationTrack = null;
+    }
+
+    async function recordCertificate(track) {
+      const date = new Date().toISOString();
+      certificatesEarned[track] = date;
+      if (db && currentUser) {
+        await db.collection('progress').doc(currentUser.uid).set(
+          { certificates: { [track]: date } },
+          { merge: true }
+        );
+      }
+      renderProgressBars(); // reveal cert button
+    }
+
+    function checkNewlyCompletedTracks() {
+      ['ds', 'ml', 'ai'].forEach(track => {
+        if (certificatesEarned[track]) return; // already earned
+        const all = RESOURCES.filter(r => r.tracks.includes(track));
+        if (!all.length) return;
+        if (all.filter(r => completedSet.has(r.id)).length === all.length) {
+          triggerCelebration(track);
+          recordCertificate(track);
+        }
       });
     }
 
@@ -582,8 +800,15 @@
     // ── Firebase / progress ─────────────────────────────────────────────
     async function loadProgress() {
       if (!db) return;
-      const doc = await db.collection('progress').doc(currentUser.uid).get();
-      completedSet = new Set(doc.exists ? (doc.data().completed || []) : []);
+      const snap = await db.collection('progress').doc(currentUser.uid).get();
+      if (snap.exists) {
+        const data = snap.data();
+        completedSet       = new Set(data.completed || []);
+        certificatesEarned = data.certificates || {};
+      } else {
+        completedSet       = new Set();
+        certificatesEarned = {};
+      }
     }
 
     async function toggleResource(id) {
@@ -604,6 +829,7 @@
           { completed: firebase.firestore.FieldValue.arrayUnion(id) },
           { merge: true }
         );
+        checkNewlyCompletedTracks();
       }
       renderCheckboxes();
       renderProgressBars();
@@ -622,6 +848,7 @@
           await loadProgress();
         } else {
           completedSet.clear();
+          certificatesEarned = {};
         }
         renderAuthState();
         renderCheckboxes();
@@ -692,7 +919,15 @@
       document.getElementById('signout-btn').addEventListener('click', () => auth?.signOut());
       document.getElementById('progress-signin-btn')
         ?.addEventListener('click', () => showAuthModal('signup'));
-      document.addEventListener('keydown', e => { if (e.key === 'Escape') hideAuthModal(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') { hideAuthModal(); hideCelebration(); } });
+
+      document.getElementById('celebration-close-btn').addEventListener('click', hideCelebration);
+      document.getElementById('celebration-download-btn').addEventListener('click', () => {
+        if (celebrationTrack) generateCertificate(celebrationTrack);
+      });
+      document.querySelectorAll('.cert-dl-btn').forEach(btn =>
+        btn.addEventListener('click', () => generateCertificate(btn.dataset.track))
+      );
     }
 
     // ── Boot ────────────────────────────────────────────────────────────
