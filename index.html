@@ -638,9 +638,10 @@
         .map(p => p.title)
         .join(' · ');
 
-      // Extra vertical space when a name is present
-      const hasName = !!displayName;
-      const nShift  = hasName ? 20 : 0;
+      // Use saved name or fall back to whatever is currently in the input field
+      const certName = displayName || (document.getElementById('cert-name-input')?.value.trim() || '');
+      const hasName  = !!certName;
+      const nShift   = hasName ? 20 : 0;
 
       // Background
       doc.setFillColor(8, 8, 16);
@@ -698,7 +699,7 @@
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(15);
         doc.setTextColor(cr, cg, cb);
-        ct(displayName, 91);
+        ct(certName, 91);
       }
 
       // Intro
@@ -770,13 +771,13 @@
       ct('forgemee.vercel.app', 218 + nShift);
 
       // Disclaimer (small italic, at bottom)
-      const discY = Math.max(246, 232 + nShift);
+      const discY = Math.max(248, 234 + nShift);
       doc.setFont('helvetica', 'italic');
-      doc.setFontSize(6.5);
+      doc.setFontSize(8);
       doc.setTextColor(55, 55, 72);
       ct('For personal motivation & self-tracking only. This document is not a formal qualification,', discY);
-      ct('carries no official value, and should not be used as proof of professional certification.', discY + 6);
-      ct('ForgeMee is an independent curation project with no certification authority.', discY + 12);
+      ct('carries no official value, and should not be used as proof of professional certification.', discY + 7);
+      ct('ForgeMee is an independent curation project with no certification authority.', discY + 14);
 
       doc.save('ForgeMee-' + track + '-certificate.pdf');
     }
