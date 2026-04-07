@@ -65,6 +65,8 @@
             class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/25 focus:outline-none focus:border-purple-500/50 transition">
           <input id="auth-password" type="password" placeholder="Password (min. 6 characters)" autocomplete="current-password"
             class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/25 focus:outline-none focus:border-purple-500/50 transition">
+          <input id="auth-name" type="text" placeholder="Your name — optional, used on certificates" autocomplete="name"
+            class="hidden w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/25 focus:outline-none focus:border-purple-500/50 transition">
         </div>
         <p id="auth-message" class="text-xs mb-3 hidden"></p>
         <button id="auth-submit-btn" type="submit"
@@ -188,6 +190,14 @@
         <button id="progress-signin-btn"
           class="text-xs text-purple-400/55 hover:text-purple-400 transition-colors">
           Sign in to track →
+        </button>
+      </div>
+      <div id="cert-name-row" class="hidden mb-5 flex items-center gap-2">
+        <input id="cert-name-input" type="text" placeholder="Your name for certificates (optional)"
+          class="flex-1 bg-white/[0.03] border border-white/[0.07] rounded-xl px-3 py-2 text-xs text-white placeholder-white/20 focus:outline-none focus:border-purple-500/40 transition">
+        <button id="cert-name-save"
+          class="text-xs px-3 py-2 rounded-xl border border-white/[0.08] text-white/35 hover:text-white/70 transition flex-shrink-0">
+          Save
         </button>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -347,6 +357,7 @@
     let completedSet     = new Set();
     let certificatesEarned = {};   // { ds: ISO_date, ml: ISO_date, ai: ISO_date }
     let celebrationTrack   = null;
+    let displayName        = '';
 
     // ── Phase metadata ──────────────────────────────────────────────────
     const PHASES = [
@@ -621,6 +632,16 @@
       const ct = (t, y) => doc.text(t, cx, y, { align: 'center' });
       const dk = (v, f) => Math.round(v * f);
 
+      // Areas studied: phase titles that have resources for this track
+      const areasStudied = PHASES
+        .filter(p => RESOURCES.some(r => r.tracks.includes(track) && r.phase === p.id))
+        .map(p => p.title)
+        .join(' · ');
+
+      // Extra vertical space when a name is present
+      const hasName = !!displayName;
+      const nShift  = hasName ? 20 : 0;
+
       // Background
       doc.setFillColor(8, 8, 16);
       doc.rect(0, 0, W, H, 'F');
@@ -660,71 +681,102 @@
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(6.5);
       doc.setTextColor(95, 95, 115);
-      ct('C E R T I F I C A T E   O F   C O M P L E T I O N', 59.5);
+      ct('C E R T I F I C A T E   O F   C O M P L E T I O N', 58);
 
       // "Congratulations!"
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(22);
       doc.setTextColor(232, 232, 248);
-      ct('Congratulations!', 85);
+      ct('Congratulations!', 72);
 
-      // Intro lines
+      // Name block (optional)
+      if (hasName) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(100, 100, 122);
+        ct('awarded to', 82);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(15);
+        doc.setTextColor(cr, cg, cb);
+        ct(displayName, 91);
+      }
+
+      // Intro
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9.5);
       doc.setTextColor(140, 140, 162);
-      ct('You have completed all suggested courses on the', 99);
+      ct('You have completed all suggested courses on the', 82 + nShift);
 
       // Track name — large, coloured
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(34);
       doc.setTextColor(cr, cg, cb);
-      ct(trackName.toUpperCase(), 122);
+      ct(trackName.toUpperCase(), 104 + nShift);
 
       // "path"
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(12);
       doc.setTextColor(150, 150, 172);
-      ct('path', 134);
+      ct('path', 116 + nShift);
 
       // Centre divider
       doc.setDrawColor(48, 48, 64);
       doc.setLineWidth(0.2);
-      doc.line(cx - 44, 144, cx + 44, 144);
+      doc.line(cx - 44, 126 + nShift, cx + 44, 126 + nShift);
 
       // Honour code
       doc.setFont('helvetica', 'italic');
       doc.setFontSize(8);
       doc.setTextColor(90, 90, 110);
-      ct('( as per the honour code of self-tracking )', 155);
+      ct('( as per the honour code of self-tracking )', 137 + nShift);
+
+      // Areas studied
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(100, 100, 120);
+      ct('Areas studied:', 149 + nShift);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(7);
+      doc.setTextColor(dk(cr,.75), dk(cg,.75), dk(cb,.75));
+      ct(areasStudied, 157 + nShift);
 
       // Body copy
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
       doc.setTextColor(118, 118, 140);
-      ct('A curated journey from Python foundations', 173);
-      ct('to production AI systems.', 181);
+      ct('A curated journey from Python foundations', 168 + nShift);
+      ct('to production AI systems.', 176 + nShift);
 
       // Curated by
       doc.setFontSize(8);
       doc.setTextColor(88, 88, 108);
-      ct('Curated by Eirini Ornithopoulou \u00B7 2026', 193);
+      ct('Curated by Eirini Ornithopoulou \u00B7 2026', 186 + nShift);
 
       // Bottom rule
       doc.setDrawColor(44, 44, 60);
       doc.setLineWidth(0.15);
-      doc.line(cx - 54, 215, cx + 54, 215);
+      doc.line(cx - 54, 198 + nShift, cx + 54, 198 + nShift);
 
       // Date
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(8);
       doc.setTextColor(138, 138, 160);
-      ct('Completed on: ' + certDate, 226);
+      ct('Completed on: ' + certDate, 208 + nShift);
 
       // URL
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7);
       doc.setTextColor(dk(cr,.65), dk(cg,.65), dk(cb,.65));
-      ct('forgemee.vercel.app', 238);
+      ct('forgemee.vercel.app', 218 + nShift);
+
+      // Disclaimer (small italic, at bottom)
+      const discY = Math.max(246, 232 + nShift);
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(6.5);
+      doc.setTextColor(55, 55, 72);
+      ct('For personal motivation & self-tracking only. This document is not a formal qualification,', discY);
+      ct('carries no official value, and should not be used as proof of professional certification.', discY + 6);
+      ct('ForgeMee is an independent curation project with no certification authority.', discY + 12);
 
       doc.save('ForgeMee-' + track + '-certificate.pdf');
     }
@@ -785,6 +837,9 @@
       const signinPrompt = document.getElementById('progress-signin-btn');
       const heroCta      = document.getElementById('hero-account-cta');
 
+      const nameRow = document.getElementById('cert-name-row');
+      const nameInput = document.getElementById('cert-name-input');
+
       if (currentUser) {
         authBtn.classList.add('hidden');
         userInfo.classList.remove('hidden');
@@ -792,11 +847,14 @@
         emailEl.textContent = currentUser.email;
         signinPrompt?.classList.add('hidden');
         heroCta?.classList.add('hidden');
+        nameRow?.classList.remove('hidden');
+        if (nameInput && displayName) nameInput.value = displayName;
       } else {
         authBtn.classList.remove('hidden');
         userInfo.classList.add('hidden');
         signinPrompt?.classList.remove('hidden');
         heroCta?.classList.remove('hidden');
+        nameRow?.classList.add('hidden');
       }
     }
 
@@ -813,6 +871,7 @@
       msg.textContent = '';
       document.getElementById('auth-email').value    = '';
       document.getElementById('auth-password').value = '';
+      document.getElementById('auth-name').value     = '';
     }
     function setAuthTab(tab) {
       document.querySelectorAll('.auth-tab-btn').forEach(btn =>
@@ -821,6 +880,9 @@
       document.getElementById('auth-submit-btn').textContent =
         tab === 'signin' ? 'Sign in' : 'Create account';
       document.getElementById('auth-form').dataset.mode = tab;
+      document.getElementById('auth-name').classList.toggle('hidden', tab !== 'signup');
+      document.getElementById('auth-password').setAttribute('autocomplete',
+        tab === 'signin' ? 'current-password' : 'new-password');
     }
     async function submitAuth(e) {
       e.preventDefault();
@@ -839,7 +901,15 @@
         if (mode === 'signin') {
           await auth.signInWithEmailAndPassword(email, password);
         } else {
-          await auth.createUserWithEmailAndPassword(email, password);
+          const nameVal = document.getElementById('auth-name').value.trim();
+          const cred = await auth.createUserWithEmailAndPassword(email, password);
+          if (db && nameVal) {
+            displayName = nameVal;
+            await db.collection('progress').doc(cred.user.uid).set(
+              { displayName: nameVal },
+              { merge: true }
+            );
+          }
         }
         hideAuthModal();
       } catch (err) {
@@ -860,9 +930,11 @@
         const data = snap.data();
         completedSet       = new Set(data.completed || []);
         certificatesEarned = data.certificates || {};
+        displayName        = data.displayName || '';
       } else {
         completedSet       = new Set();
         certificatesEarned = {};
+        displayName        = '';
       }
     }
 
@@ -888,6 +960,20 @@
       }
       renderCheckboxes();
       renderProgressBars();
+    }
+
+    async function saveDisplayName() {
+      if (!currentUser || !db) return;
+      const val = document.getElementById('cert-name-input').value.trim();
+      displayName = val;
+      const btn = document.getElementById('cert-name-save');
+      btn.textContent = 'Saved ✓';
+      btn.disabled = true;
+      await db.collection('progress').doc(currentUser.uid).set(
+        { displayName: val },
+        { merge: true }
+      );
+      setTimeout(() => { btn.textContent = 'Save'; btn.disabled = false; }, 1800);
     }
 
     function initAuth() {
@@ -976,6 +1062,10 @@
         ?.addEventListener('click', () => showAuthModal('signup'));
       document.addEventListener('keydown', e => { if (e.key === 'Escape') { hideAuthModal(); hideCelebration(); } });
 
+      document.getElementById('cert-name-save')?.addEventListener('click', saveDisplayName);
+      document.getElementById('cert-name-input')?.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); saveDisplayName(); }
+      });
       document.getElementById('celebration-close-btn').addEventListener('click', hideCelebration);
       document.getElementById('celebration-download-btn').addEventListener('click', () => {
         if (celebrationTrack) generateCertificate(celebrationTrack);
