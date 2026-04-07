@@ -318,8 +318,8 @@
       <div class="text-3xl mb-3">🏆</div>
       <p class="text-white/30 text-sm font-medium mb-1">No contributors yet — be the first!</p>
       <p class="text-white/18 text-xs leading-relaxed">
-        <a href="suggestions.html" class="text-purple-400/50 hover:text-purple-400 transition-colors underline underline-offset-2 decoration-purple-400/25">Suggest a resource</a>
-        and include your name in the form.<br>
+        <a href="suggestions.html" class="text-purple-400/50 hover:text-purple-400 transition-colors underline underline-offset-2 decoration-purple-400/25">Suggest a resource via form</a>
+        or <a href="mailto:renaorn@gmail.com" class="text-purple-400/50 hover:text-purple-400 transition-colors underline underline-offset-2 decoration-purple-400/25">email me directly</a> and include your name.<br>
         If it makes the list, your name will appear here with a note on what you contributed.
       </p>
     </div>
@@ -348,10 +348,10 @@
       <p class="text-white/22 text-sm max-w-sm leading-relaxed">
         All resources are free or have a substantial free tier.<br>No affiliations or sponsorships.
       </p>
-      <a href="suggestions.html"
-        class="mt-1 text-xs text-purple-400/45 hover:text-purple-400 transition-colors">
-        Suggest a resource →
-      </a>
+      <p class="mt-1 text-xs text-purple-400/45">
+        <a href="suggestions.html" class="hover:text-purple-400 transition-colors underline underline-offset-2 decoration-purple-400/25">Suggest a resource via form</a>
+        or <a href="mailto:renaorn@gmail.com" class="hover:text-purple-400 transition-colors underline underline-offset-2 decoration-purple-400/25">email me directly</a>
+      </p>
     </div>
   </footer>
 
@@ -456,9 +456,12 @@
           <div class="w-9 h-9 rounded-xl bg-white/[0.05] flex items-center justify-center text-lg flex-shrink-0">
             ${TYPE_ICON[r.type]}
           </div>
-          <span class="text-[11px] px-2.5 py-0.5 rounded-full font-medium flex-shrink-0 ${LEVEL_CLS[r.level]}">
-            ${r.level.charAt(0).toUpperCase() + r.level.slice(1)}
-          </span>
+          <div class="flex items-center gap-1.5 flex-shrink-0">
+            ${r.optional ? '<span class="text-[10px] px-2 py-0.5 rounded-full font-medium text-white/35 bg-white/[0.06]">Optional</span>' : ''}
+            <span class="text-[11px] px-2.5 py-0.5 rounded-full font-medium ${LEVEL_CLS[r.level]}">
+              ${r.level.charAt(0).toUpperCase() + r.level.slice(1)}
+            </span>
+          </div>
         </div>
         <div class="text-[11px] font-medium text-white/25 mb-1.5 uppercase tracking-wider">${TYPE_LABEL[r.type]}</div>
         <h3 class="font-semibold text-white/90 text-sm leading-snug mb-2">${r.name}</h3>
@@ -1083,7 +1086,7 @@
           cycleEl.classList.add('anim-in');
           setTimeout(() => cycleEl.classList.remove('anim-in'), 460);
         }, 360);
-      }, 2800);
+      }, 1960);
     }
 
     // ── Nav reveal on scroll ────────────────────────────────────────────
