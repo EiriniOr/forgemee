@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suggest a Resource — ForgeMee</title>
+  <meta name="description" content="Suggest a free resource to add to the ForgeMee roadmap for AI Engineers, Data Scientists, and ML Engineers.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Pacifico&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!--
+    EmailJS setup (free — 200 emails/month, no CC, email never exposed in code):
+    1. Create free account at https://emailjs.com
+    2. Email Services → Add New Service → connect Gmail / Outlook
+    3. Email Templates → Create Template — use these variables in the template body:
+         {{resource_name}}, {{resource_url}}, {{resource_type}}, {{level}},
+         {{tracks}}, {{why}}, {{submitter_name}}, {{submitter_email}}, {{submitted_at}}
+    4. Account → General → API Keys → copy Public Key
+    5. Replace the three placeholder strings below
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#080810] text-white min-h-screen antialiased overflow-x-hidden">
+
+  <!-- ── NAV ──────────────────────────────────────────────────────────────── -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-[#080810]/90 border-b border-white/[0.06] backdrop-blur-xl">
+    <div class="max-w-2xl mx-auto px-5 h-14 flex items-center justify-between">
+      <a href="index.html" class="text-xl flex-shrink-0 leading-none">
+        <span class="forge-text">Forge</span><span class="mee-text text-purple-400">Mee</span>
+      </a>
+      <a href="index.html" class="text-xs text-white/38 hover:text-white/70 transition-colors">
+        ← Back to roadmap
+      </a>
+    </div>
+  </nav>
+
+
+  <!-- ── HERO ─────────────────────────────────────────────────────────────── -->
+  <section class="pt-32 pb-12 px-6 text-center">
+    <div class="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/18 rounded-full px-3.5 py-1 text-xs text-purple-400/65 mb-6">
+      <span class="w-1.5 h-1.5 rounded-full bg-purple-400/70 inline-block"></span>
+      Community
+    </div>
+    <h1 class="text-4xl md:text-5xl font-black tracking-tight mb-4">Suggest a Resource</h1>
+    <p class="text-white/38 text-base max-w-sm mx-auto leading-relaxed">
+      Found something great? Help grow the roadmap.
+      All suggestions are reviewed before being added.
+    </p>
+  </section>
+
+
+  <!-- ── FORM ─────────────────────────────────────────────────────────────── -->
+  <main class="max-w-xl mx-auto px-5 pb-28">
+
+    <form id="suggestion-form" novalidate class="resource-card rounded-2xl p-7 md:p-9 space-y-6">
+
+      <!-- Honeypot — bots fill this, humans don't see it -->
+      <div style="display:none" aria-hidden="true">
+        <input type="text" name="website" id="hp-website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <!-- Resource name -->
+      <div>
+        <label class="sug-label" for="f-name">
+          Resource name <span class="text-purple-400">*</span>
+        </label>
+        <input id="f-name" type="text" placeholder="e.g. Andrej Karpathy — Intro to LLMs"
+          maxlength="120" autocomplete="off"
+          class="sug-input">
+        <p class="field-error" id="err-name"></p>
+      </div>
+
+      <!-- URL -->
+      <div>
+        <label class="sug-label" for="f-url">
+          URL <span class="text-purple-400">*</span>
+        </label>
+        <input id="f-url" type="url" placeholder="https://…"
+          class="sug-input">
+        <p class="field-error" id="err-url"></p>
+      </div>
+
+      <!-- Tracks -->
+      <div>
+        <label class="sug-label">
+          Relevant tracks <span class="text-purple-400">*</span>
+        </label>
+        <div class="flex gap-2.5 flex-wrap mt-0.5">
+          <label class="track-check-label" data-track="ds">
+            <input type="checkbox" value="ds" class="track-check sr-only">
+            <span class="track-chip border border-blue-500/22 text-blue-400/55 bg-blue-500/[0.06]">📊 Data Scientist</span>
+          </label>
+          <label class="track-check-label" data-track="ml">
+            <input type="checkbox" value="ml" class="track-check sr-only">
+            <span class="track-chip border border-violet-500/22 text-violet-400/55 bg-violet-500/[0.06]">🧠 ML Engineer</span>
+          </label>
+          <label class="track-check-label" data-track="ai">
+            <input type="checkbox" value="ai" class="track-check sr-only">
+            <span class="track-chip border border-pink-500/22 text-pink-400/55 bg-pink-500/[0.06]">⚡ AI Engineer</span>
+          </label>
+        </div>
+        <p class="field-error" id="err-tracks"></p>
+      </div>
+
+      <!-- Type + Level -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="sug-label" for="f-type">
+            Type <span class="text-purple-400">*</span>
+          </label>
+          <select id="f-type" class="sug-input sug-select">
+            <option value="" disabled selected>Select…</option>
+            <option value="Course">🎓 Course</option>
+            <option value="YouTube">🎥 YouTube</option>
+            <option value="Book">📖 Book</option>
+            <option value="Platform">🏆 Platform</option>
+            <option value="Guide">📋 Guide / Docs</option>
+          </select>
+          <p class="field-error" id="err-type"></p>
+        </div>
+        <div>
+          <label class="sug-label" for="f-level">
+            Level <span class="text-purple-400">*</span>
+          </label>
+          <select id="f-level" class="sug-input sug-select">
+            <option value="" disabled selected>Select…</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+          <p class="field-error" id="err-level"></p>
+        </div>
+      </div>
+
+      <!-- Why -->
+      <div>
+        <label class="sug-label" for="f-why">
+          Why suggest this?
+          <span class="text-white/20 font-normal normal-case tracking-normal ml-1 text-[11px]">optional</span>
+        </label>
+        <textarea id="f-why" rows="3" maxlength="500"
+          placeholder="What makes it stand out? Which phase does it belong in?"
+          class="sug-input resize-none"></textarea>
+        <div class="flex items-start justify-between mt-1">
+          <p class="field-error" id="err-why"></p>
+          <span id="why-count" class="text-[10px] text-white/18 ml-auto tabular-nums shrink-0">0 / 500</span>
+        </div>
+      </div>
+
+      <!-- Name + Email -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="sug-label" for="f-sub-name">
+            Your name
+            <span class="text-white/20 font-normal normal-case tracking-normal ml-1 text-[11px]">optional</span>
+          </label>
+          <input id="f-sub-name" type="text" placeholder="Anon is fine" maxlength="60"
+            class="sug-input">
+        </div>
+        <div>
+          <label class="sug-label" for="f-sub-email">
+            Your email
+            <span class="text-white/20 font-normal normal-case tracking-normal ml-1 text-[11px]">optional</span>
+          </label>
+          <input id="f-sub-email" type="email" placeholder="For follow-up only"
+            class="sug-input">
+          <p class="field-error" id="err-sub-email"></p>
+        </div>
+      </div>
+
+      <!-- Global send error -->
+      <p id="send-error" class="hidden text-xs text-red-400 text-center -mb-2"></p>
+
+      <!-- Submit -->
+      <button id="submit-btn" type="submit"
+        class="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition">
+        Send Suggestion →
+      </button>
+
+    </form>
+
+    <!-- Success state -->
+    <div id="success-msg" class="hidden mt-6 p-8 rounded-2xl border border-emerald-500/18 bg-emerald-500/[0.04] text-center">
+      <div class="text-4xl mb-4">🎉</div>
+      <h3 class="font-bold text-emerald-400 text-lg mb-2">Suggestion received!</h3>
+      <p class="text-white/38 text-sm leading-relaxed">
+        Thank you for helping grow the roadmap.<br>It'll be reviewed and added if it fits.
+      </p>
+      <div class="mt-6 flex gap-3 justify-center">
+        <button id="suggest-another-btn"
+          class="text-xs px-4 py-2 rounded-full border border-white/10 text-white/38 hover:text-white transition">
+          Suggest another →
+        </button>
+        <a href="index.html"
+          class="text-xs px-4 py-2 rounded-full border border-purple-500/22 text-purple-400/65 hover:text-purple-400 transition">
+          Back to roadmap
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+
+  <!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+  <footer class="border-t border-white/[0.05] py-10 px-6">
+    <div class="max-w-xl mx-auto flex flex-col items-center gap-2 text-center">
+      <div class="text-xl leading-none">
+        <span class="forge-text">Forge</span><span class="mee-text text-purple-400">Mee</span>
+      </div>
+      <a href="index.html" class="text-white/22 text-xs hover:text-white/50 transition-colors">← Back to roadmap</a>
+    </div>
+  </footer>
+
+
+  <script>
+  (function () {
+
+    // ── EmailJS credentials ──────────────────────────────────────────────
+    // Replace these three values after completing the setup described in <head>
+    const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
+    const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
+    const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+    const EMAILJS_READY = EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY';
+    if (EMAILJS_READY) emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+    // ── Content guards ───────────────────────────────────────────────────
+    // Basic profanity list — word-boundary matched so "class" ≠ "ass"
+    const BLOCKED_WORDS = [
+      'fuck','shit','bitch','cunt','dick','cock','pussy','asshole',
+      'bastard','piss','slut','whore','nigger','nigga','faggot','retard'
+    ];
+
+    function hasProfanity(text) {
+      const lower = text.toLowerCase();
+      return BLOCKED_WORDS.some(w => new RegExp('\\b' + w + '(s|ed|ing|er)?' + '\\b').test(lower));
+    }
+
+    function isSpammy(text) {
+      if (!text || text.length < 4) return false;
+      // Same character repeated 5+ times in a row (aaaaa, !!!!!!)
+      if (/(.)\1{4,}/.test(text)) return true;
+      // 3+ consecutive exclamation or question marks
+      if (/[!?]{3,}/.test(text)) return true;
+      // More than 72 % of alpha chars are uppercase (SHOUTING)
+      const alpha = text.replace(/[^a-zA-Z]/g, '');
+      if (alpha.length > 7 && (text.match(/[A-Z]/g) || []).length / alpha.length > 0.72) return true;
+      // URLs embedded in non-URL fields (spam links)
+      if (/https?:\/\//.test(text)) return true;
+      return false;
+    }
+
+    // RFC-3986-flavoured URL — must start https:// or http://
+    const RX_URL   = /^https?:\/\/[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+([/?#][^\s]*)?$/;
+    const RX_EMAIL = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+
+    // ── Rate limit (max 3 per hour per browser) ──────────────────────────
+    const RL_KEY = 'fmee_sug_ts';
+    function withinRateLimit() {
+      const now     = Date.now();
+      const stored  = JSON.parse(localStorage.getItem(RL_KEY) || '[]');
+      const recent  = stored.filter(t => now - t < 3_600_000); // last 60 min
+      if (recent.length >= 3) return false;
+      recent.push(now);
+      localStorage.setItem(RL_KEY, JSON.stringify(recent));
+      return true;
+    }
+
+    // ── Track chip toggle ────────────────────────────────────────────────
+    document.querySelectorAll('.track-check').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const label = cb.closest('.track-check-label');
+        const track = label.dataset.track;
+        const chip  = label.querySelector('.track-chip');
+        chip.classList.remove('active-ds', 'active-ml', 'active-ai');
+        if (cb.checked) chip.classList.add('active-' + track);
+      });
+    });
+
+    // ── Char counter for "why" field ─────────────────────────────────────
+    const whyEl    = document.getElementById('f-why');
+    const whyCount = document.getElementById('why-count');
+    whyEl.addEventListener('input', () => {
+      whyCount.textContent = whyEl.value.length + ' / 500';
+    });
+
+    // ── Error helpers ─────────────────────────────────────────────────────
+    function showErr(id, msg) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+    function clearErrors() {
+      document.querySelectorAll('.field-error, #send-error').forEach(el => {
+        el.textContent = '';
+        el.classList.add('hidden');
+      });
+    }
+
+    // ── Validation ────────────────────────────────────────────────────────
+    function validate() {
+      clearErrors();
+      let ok = true;
+
+      // Resource name
+      const name = document.getElementById('f-name').value.trim();
+      if (!name) {
+        showErr('err-name', 'Resource name is required.'); ok = false;
+      } else if (name.length < 3) {
+        showErr('err-name', 'Name must be at least 3 characters.'); ok = false;
+      } else if (hasProfanity(name) || isSpammy(name)) {
+        showErr('err-name', 'Please keep it clean and relevant.'); ok = false;
+      }
+
+      // URL
+      const url = document.getElementById('f-url').value.trim();
+      if (!url) {
+        showErr('err-url', 'URL is required.'); ok = false;
+      } else if (!RX_URL.test(url)) {
+        showErr('err-url', 'Enter a valid URL starting with https://'); ok = false;
+      }
+
+      // Tracks
+      const tracks = [...document.querySelectorAll('.track-check:checked')];
+      if (!tracks.length) {
+        showErr('err-tracks', 'Select at least one track.'); ok = false;
+      }
+
+      // Type / Level
+      if (!document.getElementById('f-type').value) {
+        showErr('err-type', 'Select a resource type.'); ok = false;
+      }
+      if (!document.getElementById('f-level').value) {
+        showErr('err-level', 'Select a difficulty level.'); ok = false;
+      }
+
+      // Why (optional but validated if filled)
+      const why = whyEl.value.trim();
+      if (why) {
+        if (hasProfanity(why)) {
+          showErr('err-why', 'Please keep your comments constructive.'); ok = false;
+        } else if (isSpammy(why)) {
+          showErr('err-why', 'Message looks spammy — please revise.'); ok = false;
+        }
+      }
+
+      // Submitter email (optional but validated if filled)
+      const subEmail = document.getElementById('f-sub-email').value.trim();
+      if (subEmail && !RX_EMAIL.test(subEmail)) {
+        showErr('err-sub-email', 'Enter a valid email address.'); ok = false;
+      }
+
+      return ok;
+    }
+
+    // ── Submit ────────────────────────────────────────────────────────────
+    document.getElementById('suggestion-form').addEventListener('submit', async e => {
+      e.preventDefault();
+
+      // Honeypot — silently drop if filled (bot)
+      if (document.getElementById('hp-website').value) return;
+
+      if (!validate()) return;
+
+      if (!withinRateLimit()) {
+        showErr('send-error', 'Too many submissions. Please wait an hour and try again.');
+        return;
+      }
+
+      if (!EMAILJS_READY) {
+        showErr('send-error', 'Submission service not configured yet — please try again later.');
+        return;
+      }
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled    = true;
+      btn.textContent = 'Sending…';
+
+      const TRACK_LABELS = { ds: 'Data Scientist', ml: 'ML Engineer', ai: 'AI Engineer' };
+      const selectedTracks = [...document.querySelectorAll('.track-check:checked')]
+        .map(c => TRACK_LABELS[c.value]).join(', ');
+
+      const payload = {
+        resource_name:   document.getElementById('f-name').value.trim(),
+        resource_url:    document.getElementById('f-url').value.trim(),
+        resource_type:   document.getElementById('f-type').value,
+        level:           document.getElementById('f-level').value,
+        tracks:          selectedTracks,
+        why:             whyEl.value.trim() || '(not provided)',
+        submitter_name:  document.getElementById('f-sub-name').value.trim() || 'Anonymous',
+        submitter_email: document.getElementById('f-sub-email').value.trim() || '(not provided)',
+        submitted_at:    new Date().toLocaleString('en-GB', { dateStyle: 'long', timeStyle: 'short' }),
+      };
+
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, payload);
+        document.getElementById('suggestion-form').classList.add('hidden');
+        document.getElementById('success-msg').classList.remove('hidden');
+      } catch (_) {
+        showErr('send-error', 'Could not send — please try again in a moment.');
+        btn.disabled    = false;
+        btn.textContent = 'Send Suggestion →';
+      }
+    });
+
+    // ── Suggest another ───────────────────────────────────────────────────
+    document.getElementById('suggest-another-btn').addEventListener('click', () => {
+      document.getElementById('suggestion-form').reset();
+      // Reset track chips
+      document.querySelectorAll('.track-check-label').forEach(label => {
+        label.querySelector('.track-chip').classList.remove('active-ds', 'active-ml', 'active-ai');
+      });
+      whyCount.textContent = '0 / 500';
+      clearErrors();
+      document.getElementById('suggestion-form').classList.remove('hidden');
+      document.getElementById('success-msg').classList.add('hidden');
+    });
+
+  })();
+  </script>
+
+</body>
+</html>
