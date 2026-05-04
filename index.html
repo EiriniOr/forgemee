@@ -180,17 +180,6 @@
   </nav>
 
 
-  <!-- ── LEFT JUMP NAV ──────────────────────────────────────────────────── -->
-  <aside id="jump-nav" class="fixed top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-2.5">
-    <a href="#phase-0" class="jump-link" data-section="phase-0"><span class="jump-dot"></span><span class="jump-label">Foundations</span></a>
-    <a href="#phase-1" class="jump-link" data-section="phase-1"><span class="jump-dot"></span><span class="jump-label">Core ML & DS</span></a>
-    <a href="#phase-2" class="jump-link" data-section="phase-2"><span class="jump-dot"></span><span class="jump-label">Deep Learning</span></a>
-    <a href="#phase-3" class="jump-link" data-section="phase-3"><span class="jump-dot"></span><span class="jump-label">AI Engineering</span></a>
-    <a href="#phase-4" class="jump-link" data-section="phase-4"><span class="jump-dot"></span><span class="jump-label">Practice</span></a>
-    <a href="#phase-5" class="jump-link" data-section="phase-5"><span class="jump-dot"></span><span class="jump-label">Reading List</span></a>
-    <a href="#contributors" class="jump-link" data-section="contributors"><span class="jump-dot"></span><span class="jump-label">Wall of Fame</span></a>
-  </aside>
-
   <!-- ── HERO ───────────────────────────────────────────────────────────── -->
   <section id="hero" class="hero-bg hero-grid relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 py-24">
     <div class="orb orb-1"></div>
@@ -254,6 +243,22 @@
     </div>
   </section>
 
+
+  <!-- ── CONTENT LAYOUT ───────────────────────────────────────────────── -->
+  <div id="content-layout" class="xl:flex xl:items-start xl:justify-center xl:gap-x-8 xl:px-4">
+
+    <!-- ── LEFT JUMP NAV ─────────────────────────────────────────────── -->
+    <aside id="jump-nav" class="hidden xl:flex flex-col gap-2.5 sticky self-start shrink-0">
+      <a href="#phase-0" class="jump-link" data-section="phase-0"><span class="jump-dot"></span><span class="jump-label">Foundations</span></a>
+      <a href="#phase-1" class="jump-link" data-section="phase-1"><span class="jump-dot"></span><span class="jump-label">Core ML & DS</span></a>
+      <a href="#phase-2" class="jump-link" data-section="phase-2"><span class="jump-dot"></span><span class="jump-label">Deep Learning</span></a>
+      <a href="#phase-3" class="jump-link" data-section="phase-3"><span class="jump-dot"></span><span class="jump-label">AI Engineering</span></a>
+      <a href="#phase-4" class="jump-link" data-section="phase-4"><span class="jump-dot"></span><span class="jump-label">Practice</span></a>
+      <a href="#phase-5" class="jump-link" data-section="phase-5"><span class="jump-dot"></span><span class="jump-label">Reading List</span></a>
+      <a href="#contributors" class="jump-link" data-section="contributors"><span class="jump-dot"></span><span class="jump-label">Wall of Fame</span></a>
+    </aside>
+
+    <div class="flex-1 min-w-0">
 
   <!-- ── ROADMAP ────────────────────────────────────────────────────────── -->
   <main id="roadmap" class="max-w-6xl mx-auto px-5 pt-20 pb-28">
@@ -362,6 +367,9 @@
       </div>
     -->
   </section>
+
+    </div><!-- end flex-1 content -->
+  </div><!-- end content-layout -->
 
 
   <!-- ── FOOTER ─────────────────────────────────────────────────────────── -->
