@@ -85,8 +85,7 @@
 
 /* ── Left jump nav ───────────────────────────────────────────────────────── */
 #jump-nav {
-  /* right edge sits 12px left of the content container edge */
-  right: calc(50% + 576px + 12px);
+  top: calc(50vh - 72px);
 }
 .jump-link {
   display: flex;
