@@ -188,9 +188,13 @@
 
     <div class="relative z-10 text-center w-full max-w-4xl mx-auto flex flex-col items-center">
 
-      <h1 class="text-7xl md:text-9xl leading-none mb-5 select-none">
+      <h1 class="text-7xl md:text-9xl leading-none mb-4 select-none">
         <span class="forge-text">Forge</span><span class="mee-text text-purple-400">Mee</span>
       </h1>
+
+      <p class="hero-punchline text-base md:text-xl italic tracking-wide text-white/40 mb-8 select-none">
+        Some legends are <span class="not-italic font-semibold text-purple-400">forged</span>.
+      </p>
 
       <div class="inline-flex items-center gap-1.5 bg-white/[0.04] border border-white/[0.08] rounded-full px-3.5 py-1 text-xs text-white/40 mb-10">
         Curated by <a href="https://eirini-portfolio-aer3.vercel.app/" target="_blank" rel="noopener noreferrer" class="text-purple-400/80 hover:text-purple-400 transition-colors">Eirini Ornithopoulou</a>
@@ -217,13 +221,13 @@
         <button class="track-cta group text-left p-5 rounded-2xl border border-blue-500/14 bg-blue-950/20 hover:bg-blue-950/35 hover:border-blue-500/32 transition-all duration-200" data-track="ds">
           <div class="text-2xl mb-3">📊</div>
           <div class="font-bold text-blue-300 text-base mb-1">Data Scientist</div>
-          <div class="text-xs text-white/32 leading-relaxed">Stats · Python · ML · Analysis</div>
+          <div class="text-xs text-white/32 leading-relaxed">SQL · Stats · ML · Experimentation</div>
           <div class="mt-4 text-xs text-blue-500/45 group-hover:text-blue-400 transition-colors">Start this track →</div>
         </button>
         <button class="track-cta group text-left p-5 rounded-2xl border border-violet-500/14 bg-violet-950/20 hover:bg-violet-950/35 hover:border-violet-500/32 transition-all duration-200" data-track="ml">
           <div class="text-2xl mb-3">🧠</div>
           <div class="font-bold text-violet-300 text-base mb-1">ML Engineer</div>
-          <div class="text-xs text-white/32 leading-relaxed">Deep Learning · PyTorch · Systems</div>
+          <div class="text-xs text-white/32 leading-relaxed">PyTorch · MLOps · Serving</div>
           <div class="mt-4 text-xs text-violet-500/45 group-hover:text-violet-400 transition-colors">Start this track →</div>
         </button>
         <button class="track-cta group text-left p-5 rounded-2xl border border-pink-500/14 bg-pink-950/20 hover:bg-pink-950/35 hover:border-pink-500/32 transition-all duration-200" data-track="ai">
@@ -325,6 +329,10 @@
         <span class="text-white/38">Showing</span>
         <span id="track-banner-label" class="font-semibold"></span>
         <button id="clear-track" class="text-white/24 hover:text-white/60 transition-colors text-xs ml-0.5">✕ all</button>
+      </div>
+      <div class="mt-5">
+        <div class="text-[10px] font-bold text-white/22 uppercase tracking-[0.15em] mb-2.5">Target stack — job-ready by 2026</div>
+        <div id="track-stack" class="flex flex-wrap items-center justify-center gap-1.5 max-w-xl mx-auto"></div>
       </div>
     </div>
 
@@ -436,13 +444,40 @@
 
     // ── Phase metadata ──────────────────────────────────────────────────
     const PHASES = [
-      { id: 0, label: '00', title: 'Foundations',           subtitle: 'Python programming and essential mathematics — the bedrock everything else is built on.' },
-      { id: 1, label: '01', title: 'Core ML & Data Science', subtitle: 'Classical algorithms, data manipulation, and statistical thinking.' },
-      { id: 2, label: '02', title: 'Deep Learning',          subtitle: 'Neural networks from intuition to implementation — vision, NLP, transformers.' },
-      { id: 3, label: '03', title: 'AI Engineering',         subtitle: 'LLMs, RAG pipelines, prompt engineering, and production agent systems.' },
-      { id: 4, label: '∞',  title: 'Practice & Projects',    subtitle: 'Build a portfolio, compete in challenges, and sharpen your skills.' },
-      { id: 5, label: '📚', title: 'Reading List',            subtitle: 'Books and curated feeds to go deeper and stay current with the field.' },
+      { id: 0, label: '00', title: 'Foundations',           subtitle: 'Python, mathematics, and SQL — the bedrock every role is built on. Shared by all tracks.' },
+      { id: 1, label: '01', title: 'Data & Classical ML',   subtitle: 'Dataframes, statistics, and the classical algorithms that still win most problems.' },
+      { id: 2, label: '02', title: 'Deep Learning',          subtitle: 'Neural networks from intuition to implementation in PyTorch — up to the transformer.' },
+      { id: 3, label: '03', title: 'Specialization Stacks',  subtitle: 'The tracks diverge. Pick yours above; the matching stack below is your 2026 job-ready toolkit.' },
+      { id: 4, label: '04', title: 'Production & Ops',        subtitle: 'Ship it, serve it, watch it — MLOps, model serving, and LLM evaluation.' },
+      { id: 5, label: '∞',  title: 'Practice & Portfolio',   subtitle: 'Build, compete, and publish. Proof of work beats any certificate.' },
+      { id: 6, label: '📚', title: 'Reading & Staying Current', subtitle: 'Books, essays, and curated feeds to go deeper and keep pace with the field.' },
     ];
+
+    // Representative 2026 target stack per track — shown in the track banner.
+    const STACKS = {
+      ds: ['Python', 'SQL', 'pandas / Polars', 'scikit-learn', 'statistics', 'dbt', 'Streamlit'],
+      ml: ['Python', 'PyTorch', 'scikit-learn', 'Docker', 'MLflow', 'FastAPI', 'CI/CD'],
+      ai: ['Python', 'LLM APIs', 'RAG', 'Vector DBs', 'Agents / MCP', 'LangChain', 'Evals'],
+    };
+    const STACK_CHIP_CLS = {
+      ds: 'bg-blue-500/10   text-blue-300/80   border border-blue-500/18',
+      ml: 'bg-violet-500/10 text-violet-300/80 border border-violet-500/18',
+      ai: 'bg-pink-500/10   text-pink-300/80   border border-pink-500/18',
+    };
+
+    // Labelled bands within a phase. Phase 3 splits into the three track stacks.
+    const SUBGROUPS = {
+      0: [
+        { key: 'python', label: 'Python' },
+        { key: 'math',   label: 'Mathematics' },
+        { key: 'sql',    label: 'SQL' },
+      ],
+      3: [
+        { key: 'ai-stack', label: 'AI Engineer Stack', hint: 'LLMs · RAG · Agents · MCP',           color: 'text-pink-400/70' },
+        { key: 'ml-stack', label: 'ML Engineer Stack', hint: 'Production deep learning · MLOps',     color: 'text-violet-400/70' },
+        { key: 'ds-stack', label: 'Data Scientist Stack', hint: 'Experimentation · Analytics eng.',  color: 'text-blue-400/70' },
+      ],
+    };
 
     const TYPE_ICON  = { course: '🎓', book: '📖', youtube: '🎥', platform: '🏆', guide: '📋' };
     const TYPE_LABEL = { course: 'Course', book: 'Book', youtube: 'YouTube', platform: 'Platform', guide: 'Guide' };
@@ -598,20 +633,22 @@
           </div>`;
         section.appendChild(header);
 
-        if (phase.id === 0) {
-          [{ key: 'python', label: 'Python' }, { key: 'math', label: 'Mathematics' }]
-            .forEach(({ key, label }) => {
-              const sub = items.filter(r => r.subgroup === key);
-              if (!sub.length) return;
-              const wrap = document.createElement('div');
-              wrap.className = 'mb-8';
-              const sublabel = document.createElement('div');
-              sublabel.className = 'text-[10px] font-bold text-white/22 uppercase tracking-[0.15em] mb-4';
-              sublabel.textContent = label;
-              wrap.appendChild(sublabel);
-              wrap.appendChild(buildGrid(sub));
-              section.appendChild(wrap);
-            });
+        const subs = SUBGROUPS[phase.id];
+        if (subs) {
+          subs.forEach(({ key, label, hint, color }) => {
+            const sub = items.filter(r => r.subgroup === key);
+            if (!sub.length) return;
+            const wrap = document.createElement('div');
+            wrap.className = 'phase-subgroup mb-8';
+            const sublabel = document.createElement('div');
+            sublabel.className = 'flex items-baseline gap-2.5 mb-4';
+            sublabel.innerHTML = `
+              <span class="text-[10px] font-bold uppercase tracking-[0.15em] ${color || 'text-white/22'}">${label}</span>
+              ${hint ? `<span class="text-[10px] text-white/22">${hint}</span>` : ''}`;
+            wrap.appendChild(sublabel);
+            wrap.appendChild(buildGrid(sub));
+            section.appendChild(wrap);
+          });
         } else {
           section.appendChild(buildGrid(items));
         }
@@ -637,6 +674,11 @@
           .some(c => c.style.display !== 'none');
         block.style.display = any ? '' : 'none';
       });
+      document.querySelectorAll('.phase-subgroup').forEach(block => {
+        const any = [...block.querySelectorAll('.resource-card-wrapper')]
+          .some(c => c.style.display !== 'none');
+        block.style.display = any ? '' : 'none';
+      });
       document.querySelectorAll('.phase-section').forEach(section => {
         const any = [...section.querySelectorAll('.resource-card-wrapper')]
           .some(c => c.style.display !== 'none');
@@ -648,6 +690,9 @@
       } else {
         banner.classList.remove('hidden');
         document.getElementById('track-banner-label').innerHTML = TRACK_BANNER_HTML[track];
+        document.getElementById('track-stack').innerHTML = STACKS[track]
+          .map(t => `<span class="text-[11px] px-2.5 py-1 rounded-full font-medium ${STACK_CHIP_CLS[track]}">${t}</span>`)
+          .join('');
       }
     }
 
