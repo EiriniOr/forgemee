@@ -1,14 +1,20 @@
-// MakeMee — Resource data
-// Fields: id, name, description, url, type, level, tracks[], phase, subgroup?, alt_group?
+// ForgeMee — Resource data
+// Fields: id, name, description, url, type, level, tracks[], phase, subgroup?, alt_group?, optional?
 // alt_group: string key — resources sharing the same key are mutually exclusive alternatives
-// type: 'course' | 'book' | 'youtube' | 'platform' | 'guide'
+// subgroup: groups cards under a labelled band within a phase (Phase 0 + Phase 3 stacks)
+// type:  'course' | 'book' | 'youtube' | 'platform' | 'guide'
 // level: 'beginner' | 'intermediate' | 'advanced'
 // tracks: subset of ['ds', 'ml', 'ai']
-// phase: 0=Foundations, 1=Core ML/DS, 2=Deep Learning, 3=AI Engineering, 4=Practice
+// phase: 0 Foundations · 1 Data & Classical ML · 2 Deep Learning ·
+//        3 Specialization Stacks · 4 Production & Ops · 5 Practice · 6 Reading
 
 const RESOURCES = [
 
-  // ── Phase 0 · Python ────────────────────────────────────────────────────
+  // ════════════════════════════════════════════════════════════════════════
+  // PHASE 0 · FOUNDATIONS  —  Python · Mathematics · SQL
+  // ════════════════════════════════════════════════════════════════════════
+
+  // ── Python ──────────────────────────────────────────────────────────────
   {
     id: 'brocode-python',
     name: 'Python Full Course for Beginners — Bro Code',
@@ -24,7 +30,7 @@ const RESOURCES = [
   {
     id: 'cs50p',
     name: "CS50's Introduction to Programming with Python",
-    description: "Harvard's gold-standard free Python course. Covers functions, OOP, file I/O, libraries, and testing. Pick this if you prefer structured, academically rigorous learning.",
+    description: "Harvard's gold-standard free Python course. Functions, OOP, file I/O, libraries, and testing. Pick this if you prefer structured, academically rigorous learning.",
     url: 'https://cs50.harvard.edu/python/',
     type: 'course',
     level: 'beginner',
@@ -47,21 +53,32 @@ const RESOURCES = [
   {
     id: 'arjancodes-software-design',
     name: 'Software Design in Python — ArjanCodes',
-    description: 'Playlist covering SOLID principles, design patterns, dependency injection, and clean architecture in Python. Teaches how to write production-quality, maintainable code — not just scripts.',
+    description: 'SOLID principles, design patterns, dependency injection, and clean architecture in Python. Teaches how to write production-quality, maintainable code — not just scripts. The difference between a script-writer and an engineer.',
     url: 'https://www.youtube.com/playlist?list=PLC0nd42SBTaNuP4iB4L6SJlMaHE71FG6N',
     type: 'youtube',
     level: 'intermediate',
-    tracks: ['ds', 'ml', 'ai'],
+    tracks: ['ml', 'ai'],
     phase: 0,
     subgroup: 'python',
     optional: true,
   },
 
-  // ── Phase 0 · Mathematics ───────────────────────────────────────────────
+  // ── Mathematics ─────────────────────────────────────────────────────────
+  {
+    id: 'dlai-math',
+    name: 'Mathematics for ML & Data Science — DeepLearning.AI',
+    description: 'Linear algebra, calculus, probability and statistics in one specialization, taught with Python labs and an ML slant. The most efficient single path through the maths you actually use. Free audit on Coursera.',
+    url: 'https://www.deeplearning.ai/courses/mathematics-for-machine-learning-and-data-science-specialization/',
+    type: 'course',
+    level: 'beginner',
+    tracks: ['ds', 'ml', 'ai'],
+    phase: 0,
+    subgroup: 'math',
+  },
   {
     id: 'khan-linalg',
     name: 'Khan Academy — Linear Algebra',
-    description: 'Thorough, free linear algebra from the ground up. Vectors, matrices, transformations, and eigenvalues. Pick this for a gentler, visual-first pace.',
+    description: 'Vectors, matrices, transformations, and eigenvalues from the ground up. Pick this for a gentler, visual-first pace if the maths feels rusty.',
     url: 'https://www.khanacademy.org/math/linear-algebra',
     type: 'course',
     level: 'beginner',
@@ -73,7 +90,7 @@ const RESOURCES = [
   {
     id: 'mit-18-06',
     name: 'MIT OCW 18.06 — Linear Algebra (Gilbert Strang)',
-    description: 'The legendary MIT linear algebra course. Widely considered the definitive treatment. Pick this if you want rigorous, proof-grounded understanding.',
+    description: 'The legendary MIT course, widely considered the definitive treatment. Pick this if you want rigorous, proof-grounded understanding of the maths underneath every model.',
     url: 'https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/',
     type: 'course',
     level: 'intermediate',
@@ -82,43 +99,40 @@ const RESOURCES = [
     subgroup: 'math',
     alt_group: 'linear-algebra',
   },
+
+  // ── SQL ─────────────────────────────────────────────────────────────────
   {
-    id: 'dlai-math',
-    name: 'Mathematics for ML & Data Science — DeepLearning.AI',
-    description: 'Covers linear algebra, calculus, probability and statistics with Python labs. Free audit on Coursera.',
-    url: 'https://www.deeplearning.ai/courses/mathematics-for-machine-learning-and-data-science-specialization/',
-    type: 'course',
+    id: 'sqlbolt',
+    name: 'SQLBolt — Learn SQL',
+    description: 'Interactive, in-browser SQL lessons that take you from SELECT to joins and aggregation. No setup — start querying in seconds. SQL is non-negotiable across every data role.',
+    url: 'https://sqlbolt.com/',
+    type: 'platform',
     level: 'beginner',
     tracks: ['ds', 'ml', 'ai'],
     phase: 0,
-    subgroup: 'math',
+    subgroup: 'sql',
+    alt_group: 'sql-start',
   },
-
-  // ── Phase 1 · Core ML & Data Science ────────────────────────────────────
   {
     id: 'brocode-mysql',
     name: 'MySQL Full Course — Bro Code',
-    description: '3-hour intro to MySQL: tables, queries, joins, and stored procedures. Practical SQL foundation for data work.',
+    description: '3-hour video intro to SQL with MySQL: tables, queries, joins, and stored procedures. Pick this if you prefer a guided, follow-along format over interactive drills.',
     url: 'https://www.youtube.com/watch?v=5OdVJbNCSso',
     type: 'youtube',
     level: 'beginner',
-    tracks: ['ds'],
-    phase: 1,
+    tracks: ['ds', 'ml', 'ai'],
+    phase: 0,
+    subgroup: 'sql',
+    alt_group: 'sql-start',
   },
-  {
-    id: 'kaggle-learn',
-    name: 'Kaggle Learn',
-    description: 'Free micro-courses: Intro to ML, Pandas, Feature Engineering, SQL. Each takes a few hours — immediate hands-on practice.',
-    url: 'https://www.kaggle.com/learn',
-    type: 'platform',
-    level: 'beginner',
-    tracks: ['ds', 'ml'],
-    phase: 1,
-  },
+
+  // ════════════════════════════════════════════════════════════════════════
+  // PHASE 1 · DATA & CLASSICAL ML  —  the analytical core
+  // ════════════════════════════════════════════════════════════════════════
   {
     id: 'ng-ai-everyone',
     name: 'AI for Everyone — Andrew Ng (Coursera)',
-    description: 'Non-technical grounding in AI capabilities, limitations, and strategy. Essential mental model before going deep. Free audit.',
+    description: 'Non-technical grounding in what AI can and cannot do, and how projects actually succeed. The mental model to build before going deep. Free audit, one weekend.',
     url: 'https://www.coursera.org/learn/ai-for-everyone',
     type: 'course',
     level: 'beginner',
@@ -126,31 +140,65 @@ const RESOURCES = [
     phase: 1,
   },
   {
-    id: 'mit-6036',
-    name: 'MIT OCW 6.036 — Introduction to Machine Learning',
-    description: 'MIT undergrad ML course. Classification, regression, neural nets, SVMs, Markov models. Rigorous and completely free.',
-    url: 'https://ocw.mit.edu/courses/6-036-introduction-to-machine-learning-fall-2020/',
-    type: 'course',
-    level: 'intermediate',
-    tracks: ['ds', 'ml'],
-    phase: 1,
-  },
-  {
     id: 'statquest',
     name: 'StatQuest with Josh Starmer',
-    description: 'The clearest explanations of statistics and ML algorithms on YouTube. Intimidating formulas turned into genuine intuition.',
+    description: 'The clearest explanations of statistics and ML algorithms on YouTube. Intimidating formulas turned into genuine intuition — watch alongside everything else in this phase.',
     url: 'https://www.youtube.com/@statquest',
     type: 'youtube',
     level: 'beginner',
     tracks: ['ds', 'ml'],
     phase: 1,
   },
+  {
+    id: 'fcc-data-analysis',
+    name: 'Data Analysis with Python — freeCodeCamp',
+    description: 'Hands-on NumPy and Pandas: loading, cleaning, reshaping, and analysing real datasets. The dataframe fluency every data role assumes you already have. (Pandas first; the same skills carry straight over to Polars.)',
+    url: 'https://www.freecodecamp.org/learn/data-analysis-with-python/',
+    type: 'course',
+    level: 'beginner',
+    tracks: ['ds', 'ml'],
+    phase: 1,
+  },
+  {
+    id: 'kaggle-learn',
+    name: 'Kaggle Learn',
+    description: 'Free micro-courses — Intro to ML, Pandas, Feature Engineering, Data Visualization, SQL. Each takes a few hours and is immediately hands-on. The fastest way to a first working model.',
+    url: 'https://www.kaggle.com/learn',
+    type: 'platform',
+    level: 'beginner',
+    tracks: ['ds', 'ml'],
+    phase: 1,
+  },
+  {
+    id: 'mit-6036',
+    name: 'MIT OCW 6.036 — Introduction to Machine Learning',
+    description: 'Classification, regression, neural nets, SVMs, and Markov models, taught rigorously. Pick this if you want theory-first understanding of why the algorithms work before you reach for a library.',
+    url: 'https://ocw.mit.edu/courses/6-036-introduction-to-machine-learning-fall-2020/',
+    type: 'course',
+    level: 'intermediate',
+    tracks: ['ds', 'ml'],
+    phase: 1,
+    alt_group: 'classical-ml',
+  },
+  {
+    id: 'ml-zoomcamp',
+    name: 'ML Zoomcamp — DataTalks.Club',
+    description: 'Engineering-first ML: regression, classification, and tree models, then deploying them with Scikit-learn, FastAPI, and Docker. Pick this if you want to build and ship models, not just understand them.',
+    url: 'https://datatalks.club/blog/machine-learning-zoomcamp.html',
+    type: 'youtube',
+    level: 'intermediate',
+    tracks: ['ds', 'ml'],
+    phase: 1,
+    alt_group: 'classical-ml',
+  },
 
-  // ── Phase 2 · Deep Learning ─────────────────────────────────────────────
+  // ════════════════════════════════════════════════════════════════════════
+  // PHASE 2 · DEEP LEARNING  —  neural networks & transformers
+  // ════════════════════════════════════════════════════════════════════════
   {
     id: '3b1b-neural',
     name: '3Blue1Brown — Neural Networks',
-    description: 'The best visual introduction to neural networks. Animated, intuitive, and free. Watch before anything else in this phase.',
+    description: 'The best visual introduction to neural networks and, now, transformers. Animated, intuitive, and free. Watch this before anything else in this phase.',
     url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi',
     type: 'youtube',
     level: 'beginner',
@@ -158,9 +206,19 @@ const RESOURCES = [
     phase: 2,
   },
   {
+    id: 'learn-pytorch',
+    name: 'Learn PyTorch for Deep Learning — Daniel Bourke',
+    description: 'A free, code-first book and video course that builds real PyTorch fluency: tensors, training loops, computer vision, and experiment tracking. PyTorch is the framework the field runs on.',
+    url: 'https://www.learnpytorch.io/',
+    type: 'course',
+    level: 'intermediate',
+    tracks: ['ml', 'ai'],
+    phase: 2,
+  },
+  {
     id: 'fastai-course',
     name: 'fast.ai — Practical Deep Learning for Coders',
-    description: 'Top-down: build real applications first, learn theory second. Uses PyTorch. Pick this if you learn best by doing and want intuition before math.',
+    description: 'Top-down: build real applications first, learn the theory second. Pick this if you learn best by doing and want working results before the maths.',
     url: 'https://course.fast.ai/',
     type: 'course',
     level: 'intermediate',
@@ -169,19 +227,9 @@ const RESOURCES = [
     alt_group: 'dl-main',
   },
   {
-    id: 'fastai-book',
-    name: 'fast.ai — Deep Learning for Coders (Book)',
-    description: 'Free companion textbook to the fast.ai course. Goes deeper on vision, NLP, tabular, and collaborative filtering — a genuine reference to return to.',
-    url: 'https://fastai.github.io/fastbook2e/',
-    type: 'book',
-    level: 'intermediate',
-    tracks: ['ml', 'ai'],
-    phase: 5,
-  },
-  {
     id: 'dlai-dl-spec',
     name: 'Deep Learning Specialization — Andrew Ng (Coursera)',
-    description: '5-course series: NNs, hyperparameter tuning, ML strategy, CNNs, and RNNs/sequence models. Pick this if you prefer bottom-up theory before implementation.',
+    description: '5 courses: neural nets, tuning, ML strategy, CNNs, and sequence models. Pick this if you prefer bottom-up theory before implementation. Free audit.',
     url: 'https://www.coursera.org/specializations/deep-learning',
     type: 'course',
     level: 'intermediate',
@@ -192,7 +240,7 @@ const RESOURCES = [
   {
     id: 'karpathy-zero',
     name: 'Neural Networks: Zero to Hero — Andrej Karpathy',
-    description: 'Build backpropagation, then a GPT, from scratch in pure Python. The most hands-on deep learning series in existence.',
+    description: 'Build backpropagation, then a working GPT, from scratch in pure Python. The single most valuable thing you can watch to truly understand how modern models work.',
     url: 'https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ',
     type: 'youtube',
     level: 'advanced',
@@ -200,110 +248,269 @@ const RESOURCES = [
     phase: 2,
   },
 
-  // ── Phase 3 · AI Engineering ─────────────────────────────────────────────
+  // ════════════════════════════════════════════════════════════════════════
+  // PHASE 3 · SPECIALIZATION STACKS  —  the tracks diverge here
+  //   Pick your track in the bar above; the matching stack below is your path.
+  // ════════════════════════════════════════════════════════════════════════
+
+  // ── AI Engineer stack · LLMs · RAG · Agents ─────────────────────────────
+  {
+    id: 'hf-llm-course',
+    name: 'Hugging Face LLM Course',
+    description: 'The canonical free course on transformers and LLMs: tokenizers, the Transformers library, fine-tuning, and the modern open-model ecosystem. The backbone of the AI engineering stack.',
+    url: 'https://huggingface.co/learn/llm-course',
+    type: 'course',
+    level: 'intermediate',
+    tracks: ['ai'],
+    phase: 3,
+    subgroup: 'ai-stack',
+  },
   {
     id: 'anthropic-academy',
     name: 'Anthropic Academy',
-    description: '15+ free self-paced courses from Anthropic: Claude 101, Building with the Claude API, Claude Code in Action, Model Context Protocol, Agent Skills, and more. Official certifications included.',
+    description: 'Free self-paced courses straight from a frontier lab: building with the Claude API, Claude Code, Model Context Protocol (MCP), and Agent Skills. Official certifications included.',
     url: 'https://anthropic.skilljar.com/',
     type: 'platform',
     level: 'intermediate',
     tracks: ['ai'],
     phase: 3,
-  },
-  {
-    id: 'anthropic-courses',
-    name: 'Anthropic Courses — GitHub',
-    description: 'Five free Jupyter notebook courses: API Fundamentals, Prompt Engineering Interactive Tutorial, Real World Prompting, Prompt Evaluations, and Tool Use. The official hands-on technical curriculum for building with Claude.',
-    url: 'https://github.com/anthropics/courses',
-    type: 'course',
-    level: 'intermediate',
-    tracks: ['ai'],
-    phase: 3,
+    subgroup: 'ai-stack',
   },
   {
     id: 'pe-guide',
     name: 'Prompt Engineering Guide',
-    description: 'Comprehensive reference: zero/few-shot, chain-of-thought, RAG, function calling, and agentic system patterns.',
+    description: 'The comprehensive reference: zero/few-shot, chain-of-thought, RAG, function calling, and agentic patterns. The lookup you keep open while building.',
     url: 'https://www.promptingguide.ai/',
     type: 'guide',
     level: 'intermediate',
     tracks: ['ai'],
     phase: 3,
+    subgroup: 'ai-stack',
   },
   {
     id: 'dlai-short',
     name: 'DeepLearning.AI Short Courses',
-    description: '68+ free courses: LangChain, RAG, fine-tuning, agents, vector databases, multi-modal systems. Each 1–2 hours.',
+    description: '60+ free 1–2 hour courses covering the working stack: LangChain, RAG, vector databases, function calling, and multi-agent systems. Built with the tools that ship in production.',
     url: 'https://www.deeplearning.ai/courses/',
     type: 'course',
     level: 'intermediate',
     tracks: ['ai'],
     phase: 3,
+    subgroup: 'ai-stack',
   },
   {
-    id: 'coursera-llm',
-    name: 'LLM Engineering Specialization (Coursera)',
-    description: 'End-to-end LLM engineering: prompting, fine-tuning, optimization, and RAG pipelines. Free audit available.',
-    url: 'https://www.coursera.org/specializations/llm-engineering-prompting-fine-tuning-optimization-rag',
+    id: 'hf-agents',
+    name: 'Hugging Face Agents Course',
+    description: 'A full free course on agents: tool use, the reason-act loop, multi-step workflows, and frameworks like smolagents and LlamaIndex. Agents are the centre of gravity of AI work in 2026.',
+    url: 'https://huggingface.co/learn/agents-course',
     type: 'course',
     level: 'advanced',
     tracks: ['ai'],
     phase: 3,
+    subgroup: 'ai-stack',
   },
   {
     id: 'ai-eng-hub',
     name: 'AI Engineering Hub — GitHub',
-    description: 'In-depth tutorials on LLMs, RAG pipelines, and production-grade agent systems. Actively maintained.',
+    description: 'In-depth, actively maintained tutorials on RAG pipelines and production-grade agent systems, with full runnable code. Where to go once you are building real things.',
     url: 'https://github.com/patchy631/ai-engineering-hub',
     type: 'guide',
     level: 'advanced',
     tracks: ['ai'],
     phase: 3,
+    subgroup: 'ai-stack',
   },
 
-  // ── Phase 4 · Practice & Projects ───────────────────────────────────────
+  // ── ML Engineer stack · production deep learning ────────────────────────
   {
-    id: 'kaggle',
-    name: 'Kaggle',
-    description: 'Competitions, public datasets, and community notebooks. The standard platform for building and showcasing an ML portfolio.',
-    url: 'https://www.kaggle.com/',
+    id: 'madewithml',
+    name: 'Made With ML — Goku Mohandas',
+    description: 'The definitive free course on designing, developing, and deploying production ML: clean code, testing, experiment tracking, pipelines, and CI/CD. The single best bridge from notebook to system.',
+    url: 'https://madewithml.com/',
+    type: 'course',
+    level: 'intermediate',
+    tracks: ['ml'],
+    phase: 3,
+    subgroup: 'ml-stack',
+  },
+  {
+    id: 'fsdl',
+    name: 'Full Stack Deep Learning',
+    description: 'Free lectures on building real-world ML-powered products: data management, troubleshooting models, testing, deployment, and monitoring. Fills the gap courses leave between training and shipping.',
+    url: 'https://fullstackdeeplearning.com/course/2022/',
+    type: 'course',
+    level: 'advanced',
+    tracks: ['ml'],
+    phase: 3,
+    subgroup: 'ml-stack',
+  },
+  {
+    id: 'ml-interviews',
+    name: 'Introduction to ML Interviews Book — Chip Huyen',
+    description: 'A free book on the ML engineering interview, with a strong ML-systems-design section. Doubles as a checklist of what a job-ready ML engineer is expected to know.',
+    url: 'https://huyenchip.com/ml-interviews-book/',
+    type: 'book',
+    level: 'advanced',
+    tracks: ['ml'],
+    phase: 3,
+    subgroup: 'ml-stack',
+  },
+
+  // ── Data Scientist stack · experimentation · analytics engineering ──────
+  {
+    id: 'dbt-fundamentals',
+    name: 'dbt Fundamentals',
+    description: 'The free official course on dbt, the backbone of the modern data stack: modelling, testing, and documenting transformations in the warehouse. Analytics engineering is now core to the DS role.',
+    url: 'https://learn.getdbt.com/courses/dbt-fundamentals',
+    type: 'course',
+    level: 'intermediate',
+    tracks: ['ds'],
+    phase: 3,
+    subgroup: 'ds-stack',
+  },
+  {
+    id: 'brady-neal-causal',
+    name: 'Introduction to Causal Inference — Brady Neal',
+    description: 'A free lecture series on causality from an ML angle: potential outcomes, DAGs, backdoor adjustment, and treatment effects. What separates "this correlates" from "this causes" — the heart of experimentation and A/B testing.',
+    url: 'https://www.bradyneal.com/causal-inference-course',
+    type: 'youtube',
+    level: 'advanced',
+    tracks: ['ds'],
+    phase: 3,
+    subgroup: 'ds-stack',
+  },
+  {
+    id: 'streamlit-30days',
+    name: '30 Days of Streamlit',
+    description: 'A free hands-on challenge that turns analyses into interactive data apps and dashboards. The fastest way to make your work shareable — and your portfolio clickable.',
+    url: 'https://30days.streamlit.app/',
     type: 'platform',
     level: 'intermediate',
-    tracks: ['ds', 'ml', 'ai'],
+    tracks: ['ds'],
+    phase: 3,
+    subgroup: 'ds-stack',
+  },
+
+  // ════════════════════════════════════════════════════════════════════════
+  // PHASE 4 · PRODUCTION & OPS  —  ship it, serve it, watch it
+  // ════════════════════════════════════════════════════════════════════════
+  {
+    id: 'mlops-zoomcamp',
+    name: 'MLOps Zoomcamp — DataTalks.Club',
+    description: 'Taking ML to production: experiment tracking (MLflow), pipeline orchestration, model monitoring, drift detection, and CI/CD. Required before you can call yourself an ML engineer rather than an ML practitioner.',
+    url: 'https://github.com/DataTalksClub/mlops-zoomcamp',
+    type: 'youtube',
+    level: 'intermediate',
+    tracks: ['ml'],
     phase: 4,
   },
   {
-    id: 'deep-ml',
-    name: 'Deep-ML',
-    description: 'LeetCode-style practice for ML and deep learning. Implement algorithms from scratch to internalise the maths.',
-    url: 'https://www.deep-ml.com/',
-    type: 'platform',
+    id: 'fastapi',
+    name: 'FastAPI — Official Tutorial',
+    description: 'The standard way to wrap a model in a fast, typed HTTP API. Whatever you train, this is how the rest of the world calls it. Concise and complete.',
+    url: 'https://fastapi.tiangolo.com/tutorial/',
+    type: 'guide',
     level: 'intermediate',
     tracks: ['ml', 'ai'],
     phase: 4,
   },
   {
+    id: 'hf-evals',
+    name: 'LLM Evaluation Guidebook — Hugging Face',
+    description: 'A free, opinionated guide to evaluating LLMs and LLM apps: automatic metrics, LLM-as-judge, and human evaluation. Evals and observability are what keep agentic systems honest in production.',
+    url: 'https://github.com/huggingface/evaluation-guidebook',
+    type: 'guide',
+    level: 'advanced',
+    tracks: ['ai'],
+    phase: 4,
+  },
+
+  // ════════════════════════════════════════════════════════════════════════
+  // PHASE 5 · PRACTICE & PORTFOLIO  —  proof beats certificates
+  // ════════════════════════════════════════════════════════════════════════
+  {
+    id: 'kaggle',
+    name: 'Kaggle',
+    description: 'Competitions, public datasets, and community notebooks. The standard arena for building — and publicly showcasing — an ML portfolio.',
+    url: 'https://www.kaggle.com/',
+    type: 'platform',
+    level: 'intermediate',
+    tracks: ['ds', 'ml', 'ai'],
+    phase: 5,
+  },
+  {
+    id: 'hf-spaces',
+    name: 'Hugging Face Spaces',
+    description: 'Free hosting for live ML and LLM demos. Turn a project into a shareable URL recruiters can click — far more convincing than a line on a CV.',
+    url: 'https://huggingface.co/spaces',
+    type: 'platform',
+    level: 'intermediate',
+    tracks: ['ds', 'ml', 'ai'],
+    phase: 5,
+  },
+  {
+    id: 'deep-ml',
+    name: 'Deep-ML',
+    description: 'LeetCode-style practice for ML and deep learning. Implement algorithms from scratch to internalise the maths the libraries hide from you.',
+    url: 'https://www.deep-ml.com/',
+    type: 'platform',
+    level: 'intermediate',
+    tracks: ['ml', 'ai'],
+    phase: 5,
+  },
+  {
     id: 'lc-ml',
     name: 'LeetCode — Machine Learning 101',
-    description: 'Structured ML learning path covering fundamentals for ML engineering interviews. Complements algorithm prep.',
+    description: 'A structured path covering fundamentals for ML engineering interviews. Complements algorithm prep for the coding rounds.',
     url: 'https://leetcode.com/explore/featured/card/machine-learning-101',
     type: 'platform',
     level: 'intermediate',
     tracks: ['ml'],
-    phase: 4,
+    phase: 5,
   },
 
-  // ── Phase 5 · Reading List ───────────────────────────────────────────────
+  // ════════════════════════════════════════════════════════════════════════
+  // PHASE 6 · READING & STAYING CURRENT
+  // ════════════════════════════════════════════════════════════════════════
+  {
+    id: 'illustrated-transformer',
+    name: 'The Illustrated Transformer — Jay Alammar',
+    description: 'The clearest visual walkthrough of the transformer architecture ever written. Read it once early, then again after Karpathy — it lands differently each time.',
+    url: 'https://jalammar.github.io/illustrated-transformer/',
+    type: 'guide',
+    level: 'intermediate',
+    tracks: ['ml', 'ai'],
+    phase: 6,
+  },
+  {
+    id: 'fastai-book',
+    name: 'fast.ai — Deep Learning for Coders (Book)',
+    description: 'The free companion textbook to the fast.ai course. Goes deeper on vision, NLP, tabular, and collaborative filtering — a genuine reference to return to.',
+    url: 'https://fastai.github.io/fastbook2e/',
+    type: 'book',
+    level: 'intermediate',
+    tracks: ['ml', 'ai'],
+    phase: 6,
+  },
+  {
+    id: 'lil-log',
+    name: "Lil'Log — Lilian Weng",
+    description: 'Deep, authoritative essays on agents, LLMs, RAG, and reasoning from a leading researcher. When a new idea takes over the field, this is where it gets explained properly.',
+    url: 'https://lilianweng.github.io/',
+    type: 'guide',
+    level: 'advanced',
+    tracks: ['ml', 'ai'],
+    phase: 6,
+  },
   {
     id: 'ai-digest',
     name: 'AI Weekly Digest — by Eirini Ornithopoulou',
-    description: 'A weekly curated digest of the most important agentic AI news from arXiv, Hacker News, and Reddit — summarised and audio-narrated by AI. Published every Sunday. Stay current with the field without the noise.',
+    description: 'A weekly curated digest of the most important agentic-AI news from arXiv, Hacker News, and Reddit — summarised and audio-narrated by AI. Published every Sunday. Stay current without the noise.',
     url: 'https://EiriniOr.github.io/ai-weekly-digest/',
     type: 'guide',
     level: 'advanced',
     tracks: ['ds', 'ml', 'ai'],
-    phase: 5,
+    phase: 6,
   },
 
 ];
