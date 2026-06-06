@@ -192,19 +192,13 @@
         <span class="forge-text">Forge</span><span class="mee-text text-purple-400">Mee</span>
       </h1>
 
-      <p class="hero-punchline text-base md:text-xl italic tracking-wide text-white/40 mb-8 select-none">
-        Some legends are <span class="not-italic font-semibold text-purple-400">forged</span>.
+      <p class="hero-punchline text-4xl md:text-6xl font-black tracking-tight leading-[1.05] text-white/85 mb-10 select-none">
+        Some legends are<br class="sm:hidden">
+        <span class="forged-word bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">forged</span>.
       </p>
 
-      <div class="inline-flex items-center gap-1.5 bg-white/[0.04] border border-white/[0.08] rounded-full px-3.5 py-1 text-xs text-white/40 mb-10">
+      <div class="inline-flex items-center gap-1.5 bg-white/[0.04] border border-white/[0.08] rounded-full px-3.5 py-1 text-xs text-white/40 mb-12">
         Curated by <a href="https://eirini-portfolio-aer3.vercel.app/" target="_blank" rel="noopener noreferrer" class="text-purple-400/80 hover:text-purple-400 transition-colors">Eirini Ornithopoulou</a>
-      </div>
-
-      <div class="text-white/45 text-xl md:text-2xl font-medium mb-1 select-none">Forge me into a</div>
-      <div class="h-16 md:h-24 flex items-center justify-center overflow-hidden mb-12 select-none">
-        <span id="cycle-text"
-          class="text-5xl md:text-7xl font-black bg-gradient-to-r from-violet-400 via-blue-400 to-pink-400 bg-clip-text text-transparent">
-        </span>
       </div>
 
       <p class="text-white/38 text-base md:text-lg max-w-lg mx-auto leading-relaxed mb-8">
@@ -1144,27 +1138,6 @@
       });
     }
 
-    // ── Cycling hero text ───────────────────────────────────────────────
-    const WORDS   = ['AI Engineer', 'Data Scientist', 'ML Engineer'];
-    let wordIdx   = 0;
-    const cycleEl = document.getElementById('cycle-text');
-
-    function initCycle() {
-      cycleEl.textContent = WORDS[0];
-      cycleEl.classList.add('anim-in');
-      setInterval(() => {
-        cycleEl.classList.remove('anim-in');
-        cycleEl.classList.add('anim-out');
-        setTimeout(() => {
-          wordIdx = (wordIdx + 1) % WORDS.length;
-          cycleEl.textContent = WORDS[wordIdx];
-          cycleEl.classList.remove('anim-out');
-          cycleEl.classList.add('anim-in');
-          setTimeout(() => cycleEl.classList.remove('anim-in'), 460);
-        }, 360);
-      }, 1960);
-    }
-
     // ── Jump nav active state ────────────────────────────────────────────
     function initNav() {
       const links = document.querySelectorAll('#jump-nav .jump-link');
@@ -1243,7 +1216,6 @@
     // ── Boot ────────────────────────────────────────────────────────────
     renderPhases();
     renderProgressBars(); // show correct totals (0/N) immediately
-    initCycle();
     initNav();
     initFadeIn();
     initEvents();
