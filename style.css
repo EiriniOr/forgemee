@@ -96,6 +96,51 @@
   .forged-word { animation: none; }
 }
 
+/* ── Hero track cards ───────────────────────────────────────────────────── */
+.track-ds { --c: 59, 130, 246; }   /* blue   */
+.track-ml { --c: 139, 92, 246; }   /* purple */
+.track-ai { --c: 16, 185, 129; }   /* green  */
+
+.track-cta {
+  border: 0;
+  cursor: pointer;
+  background:
+    radial-gradient(130% 90% at 0% 0%, rgba(var(--c), 0.20), transparent 58%),
+    rgba(255, 255, 255, 0.018);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+/* Soft galaxy glow blooming from the corner */
+.track-cta::before {
+  content: "";
+  position: absolute;
+  width: 180px; height: 180px;
+  top: -56px; right: -44px;
+  background: radial-gradient(circle, rgba(var(--c), 0.55), transparent 66%);
+  filter: blur(30px);
+  opacity: 0.45;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+.track-cta:hover {
+  transform: translateY(-5px);
+  background:
+    radial-gradient(130% 90% at 0% 0%, rgba(var(--c), 0.30), transparent 58%),
+    rgba(255, 255, 255, 0.03);
+  box-shadow: 0 20px 54px rgba(var(--c), 0.20);
+}
+.track-cta:hover::before {
+  opacity: 0.85;
+  transform: scale(1.18);
+}
+/* Gradient accent bar in place of the emoji */
+.track-bar {
+  width: 34px; height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(var(--c), 0.95), rgba(var(--c), 0.2));
+  box-shadow: 0 0 14px rgba(var(--c), 0.5);
+}
+
 /* ── Left jump nav ───────────────────────────────────────────────────────── */
 #jump-nav {
   top: calc(50vh - 72px);
