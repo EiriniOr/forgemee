@@ -280,10 +280,10 @@
 
         <div class="progress-track" data-track="ds">
           <div class="flex items-center justify-between mb-2.5">
-            <span class="text-sm font-semibold text-blue-300/80">📊 Data Scientist</span>
+            <span class="text-sm font-semibold text-blue-300/80">Data Scientist</span>
             <div class="flex items-center gap-2.5">
               <span class="progress-count text-xs text-white/28 tabular-nums font-medium">0 / 0</span>
-              <button class="cert-dl-btn hidden text-[11px] text-blue-400/55 hover:text-blue-400 transition-colors" data-track="ds">🏆 Certificate</button>
+              <button class="cert-dl-btn hidden text-[11px] text-blue-400/55 hover:text-blue-400 transition-colors" data-track="ds">Certificate</button>
             </div>
           </div>
           <div class="progress-bar-bg">
@@ -294,10 +294,10 @@
 
         <div class="progress-track" data-track="ml">
           <div class="flex items-center justify-between mb-2.5">
-            <span class="text-sm font-semibold text-violet-300/80">🧠 ML Engineer</span>
+            <span class="text-sm font-semibold text-violet-300/80">ML Engineer</span>
             <div class="flex items-center gap-2.5">
               <span class="progress-count text-xs text-white/28 tabular-nums font-medium">0 / 0</span>
-              <button class="cert-dl-btn hidden text-[11px] text-violet-400/55 hover:text-violet-400 transition-colors" data-track="ml">🏆 Certificate</button>
+              <button class="cert-dl-btn hidden text-[11px] text-violet-400/55 hover:text-violet-400 transition-colors" data-track="ml">Certificate</button>
             </div>
           </div>
           <div class="progress-bar-bg">
@@ -308,14 +308,14 @@
 
         <div class="progress-track" data-track="ai">
           <div class="flex items-center justify-between mb-2.5">
-            <span class="text-sm font-semibold text-pink-300/80">⚡ AI Engineer</span>
+            <span class="text-sm font-semibold text-emerald-300/80">AI Engineer</span>
             <div class="flex items-center gap-2.5">
               <span class="progress-count text-xs text-white/28 tabular-nums font-medium">0 / 0</span>
-              <button class="cert-dl-btn hidden text-[11px] text-pink-400/55 hover:text-pink-400 transition-colors" data-track="ai">🏆 Certificate</button>
+              <button class="cert-dl-btn hidden text-[11px] text-emerald-400/55 hover:text-emerald-400 transition-colors" data-track="ai">Certificate</button>
             </div>
           </div>
           <div class="progress-bar-bg">
-            <div class="progress-bar-fill bg-pink-500" style="width:0%"></div>
+            <div class="progress-bar-fill bg-emerald-500" style="width:0%"></div>
           </div>
           <div class="progress-pct text-[10px] text-white/22 mt-1.5 tabular-nums">0%</div>
         </div>
@@ -462,7 +462,7 @@
     const STACK_CHIP_CLS = {
       ds: 'bg-blue-500/10   text-blue-300/80   border border-blue-500/18',
       ml: 'bg-violet-500/10 text-violet-300/80 border border-violet-500/18',
-      ai: 'bg-pink-500/10   text-pink-300/80   border border-pink-500/18',
+      ai: 'bg-emerald-500/10   text-emerald-300/80   border border-emerald-500/18',
     };
 
     // Labelled bands within a phase. Phase 3 splits into the three track stacks.
@@ -473,7 +473,7 @@
         { key: 'sql',    label: 'SQL' },
       ],
       3: [
-        { key: 'ai-stack', label: 'AI Engineer Stack', hint: 'LLMs · RAG · Agents · MCP',           color: 'text-pink-400/70' },
+        { key: 'ai-stack', label: 'AI Engineer Stack', hint: 'LLMs · RAG · Agents · MCP',           color: 'text-emerald-400/70' },
         { key: 'ml-stack', label: 'ML Engineer Stack', hint: 'Production DL · MLOps · System design', color: 'text-violet-400/70' },
         { key: 'ds-stack', label: 'Data Scientist Stack', hint: 'Experimentation · Analytics eng.',  color: 'text-blue-400/70' },
       ],
@@ -489,13 +489,13 @@
     const TRACK_TAG_CLS = {
       ds: 'bg-blue-500/10   text-blue-400   border border-blue-500/18',
       ml: 'bg-violet-500/10 text-violet-400 border border-violet-500/18',
-      ai: 'bg-pink-500/10   text-pink-400   border border-pink-500/18',
+      ai: 'bg-emerald-500/10   text-emerald-400   border border-emerald-500/18',
     };
     const TRACK_SHORT       = { ds: 'DS', ml: 'ML', ai: 'AI' };
     const TRACK_BANNER_HTML = {
       ds: '<span class="text-blue-400">Data Scientist</span> track',
       ml: '<span class="text-violet-400">ML Engineer</span> track',
-      ai: '<span class="text-pink-400">AI Engineer</span> track',
+      ai: '<span class="text-emerald-400">AI Engineer</span> track',
     };
 
     // ── Card builder ────────────────────────────────────────────────────
@@ -746,7 +746,7 @@
       const W = 210, H = 297, cx = W / 2;
 
       const NAMES  = { ds: 'Data Scientist', ml: 'ML Engineer', ai: 'AI Engineer' };
-      const COLORS = { ds: [59, 130, 246], ml: [139, 92, 246], ai: [236, 72, 153] };
+      const COLORS = { ds: [59, 130, 246], ml: [139, 92, 246], ai: [16, 185, 129] };
       const [cr, cg, cb] = COLORS[track];
       const trackName = NAMES[track];
       const certDate  = certificatesEarned[track]
@@ -916,7 +916,7 @@
 
     function triggerCelebration(track) {
       const NAMES  = { ds: 'Data Scientist', ml: 'ML Engineer', ai: 'AI Engineer' };
-      const COLORS = { ds: 'text-blue-400', ml: 'text-violet-400', ai: 'text-pink-400' };
+      const COLORS = { ds: 'text-blue-400', ml: 'text-violet-400', ai: 'text-emerald-400' };
       celebrationTrack = track;
       const nameEl = document.getElementById('celebration-track-name');
       nameEl.textContent = NAMES[track];

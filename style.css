@@ -58,7 +58,7 @@
 }
 .orb-3 {
   width: 380px; height: 380px;
-  background: radial-gradient(circle, rgba(236, 72, 153, 0.22), transparent 70%);
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.22), transparent 70%);
   bottom: -20px; left: 33%;
   animation-delay: -8s;
 }
@@ -211,8 +211,8 @@
   box-shadow: 0 14px 44px rgba(139, 92, 246, 0.13);
 }
 .resource-card.glow-ai:hover {
-  border-color: rgba(236, 72, 153, 0.42);
-  box-shadow: 0 14px 44px rgba(236, 72, 153, 0.13);
+  border-color: rgba(16, 185, 129, 0.42);
+  box-shadow: 0 14px 44px rgba(16, 185, 129, 0.13);
 }
 
 /* ── Track filter buttons ───────────────────────────────────────────────── */
@@ -235,9 +235,9 @@
   color: #c4b5fd;
 }
 .track-btn.is-active-ai {
-  background: rgba(236, 72, 153, 0.16);
-  border-color: rgba(236, 72, 153, 0.48);
-  color: #f9a8d4;
+  background: rgba(16, 185, 129, 0.16);
+  border-color: rgba(16, 185, 129, 0.48);
+  color: #6ee7b7;
 }
 
 /* ── Scroll fade-in ─────────────────────────────────────────────────────── */
@@ -404,7 +404,7 @@
 }
 .track-chip.active-ds { border-color: rgba(59,130,246,.52) !important; color: #93c5fd !important; background: rgba(59,130,246,.14) !important; }
 .track-chip.active-ml { border-color: rgba(139,92,246,.52) !important; color: #c4b5fd !important; background: rgba(139,92,246,.14) !important; }
-.track-chip.active-ai { border-color: rgba(236,72,153,.52) !important; color: #f9a8d4 !important; background: rgba(236,72,153,.14) !important; }
+.track-chip.active-ai { border-color: rgba(16,185,129,.52) !important; color: #6ee7b7 !important; background: rgba(16,185,129,.14) !important; }
 
 /* ── Mobile nav: hide track labels, show short labels ───────────────────── */
 @media (max-width: 640px) {
