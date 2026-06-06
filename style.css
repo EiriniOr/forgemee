@@ -69,13 +69,37 @@
 
 /* ── Hero punchline ─────────────────────────────────────────────────────── */
 .forged-word {
-  position: relative;
+  display: inline-block;
+  font-family: 'Anton', 'Bebas Neue', sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   background-size: 200% auto;
-  animation: forgedShimmer 5s linear infinite;
-  filter: drop-shadow(0 0 26px rgba(217, 70, 239, 0.35));
+  transform-origin: center bottom;
+  animation:
+    forgedShimmer 5s linear infinite,
+    hammerStrike  3.4s cubic-bezier(0.18, 0.9, 0.32, 1.4) infinite;
 }
 @keyframes forgedShimmer {
   to { background-position: 200% center; }
+}
+/* Struck from above: squash on impact, recoil, settle — with a glow flash */
+@keyframes hammerStrike {
+  0%   { transform: scaleY(1)    scaleX(1)    translateY(0)   rotate(0deg);
+         filter: drop-shadow(0 0 22px rgba(217, 70, 239, 0.30)); }
+  6%   { transform: scaleY(0.74) scaleX(1.12) translateY(6px) rotate(0deg);
+         filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.95))
+                 drop-shadow(0 0 38px rgba(255, 220, 150, 0.85)); }
+  11%  { transform: scaleY(1.08) scaleX(0.95) translateY(-3px) rotate(-0.6deg); }
+  16%  { transform: scaleY(0.96) scaleX(1.02) translateY(1px)  rotate(0.6deg); }
+  22%  { transform: scaleY(1.02) scaleX(0.99) translateY(0)    rotate(-0.2deg); }
+  28%  { transform: scaleY(1)    scaleX(1)    translateY(0)    rotate(0deg);
+         filter: drop-shadow(0 0 22px rgba(217, 70, 239, 0.30)); }
+  100% { transform: scaleY(1)    scaleX(1)    translateY(0)    rotate(0deg);
+         filter: drop-shadow(0 0 22px rgba(217, 70, 239, 0.30)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .forged-word { animation: forgedShimmer 5s linear infinite; }
 }
 
 /* ── Left jump nav ───────────────────────────────────────────────────────── */
