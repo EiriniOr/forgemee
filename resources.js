@@ -65,6 +65,18 @@ const RESOURCES = [
 
   // ── Mathematics ─────────────────────────────────────────────────────────
   {
+    id: '3b1b-linalg',
+    name: '3Blue1Brown — Essence of Linear Algebra',
+    description: 'Animated geometric intuition for vectors, matrices, determinants, and eigenvalues in ~3 hours. Watch before any formal course — everything after it makes more sense.',
+    url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab',
+    type: 'youtube',
+    level: 'beginner',
+    tracks: ['ds', 'ml', 'ai'],
+    phase: 0,
+    subgroup: 'math',
+    optional: true,
+  },
+  {
     id: 'dlai-math',
     name: 'Mathematics for ML & Data Science — DeepLearning.AI',
     description: 'Linear algebra, calculus, probability and statistics in one specialization, taught with Python labs and an ML slant. The most efficient single path through the maths you actually use. Free audit on Coursera.',
@@ -187,6 +199,17 @@ const RESOURCES = [
     url: 'https://datatalks.club/blog/machine-learning-zoomcamp.html',
     type: 'youtube',
     level: 'intermediate',
+    tracks: ['ds', 'ml'],
+    phase: 1,
+    alt_group: 'classical-ml',
+  },
+  {
+    id: 'google-mlcc',
+    name: 'Google — Machine Learning Crash Course',
+    description: "Google's fast, interactive intro to ML: video lessons, visualizations, and hands-on exercises covering regression, classification, and neural net basics. Pick this if you want the quickest structured overview before going deeper.",
+    url: 'https://developers.google.com/machine-learning/crash-course',
+    type: 'course',
+    level: 'beginner',
     tracks: ['ds', 'ml'],
     phase: 1,
     alt_group: 'classical-ml',

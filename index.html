@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ForgeMee — Become an AI Engineer, Data Scientist, or ML Engineer</title>
   <meta name="description" content="Curated free resources to become an AI Engineer, Data Scientist, or ML Engineer — structured from foundations to production expertise.">
+  <meta name="theme-color" content="#080810">
+  <link rel="canonical" href="https://forgemee.vercel.app/">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚒️</text></svg>">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://forgemee.vercel.app/">
+  <meta property="og:title" content="ForgeMee — Become an AI Engineer, Data Scientist, or ML Engineer">
+  <meta property="og:description" content="A curated roadmap of free resources — from Python basics to production AI systems. Three tracks, seven phases, progress tracking.">
+  <meta property="og:site_name" content="ForgeMee">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ForgeMee — Become an AI Engineer, Data Scientist, or ML Engineer">
+  <meta name="twitter:description" content="A curated roadmap of free resources — from Python basics to production AI systems.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -254,11 +266,12 @@
     <!-- ── LEFT JUMP NAV ─────────────────────────────────────────────── -->
     <aside id="jump-nav" class="hidden xl:flex flex-col gap-2.5 sticky self-start shrink-0">
       <a href="#phase-0" class="jump-link" data-section="phase-0"><span class="jump-dot"></span><span class="jump-label">Foundations</span></a>
-      <a href="#phase-1" class="jump-link" data-section="phase-1"><span class="jump-dot"></span><span class="jump-label">Core ML & DS</span></a>
+      <a href="#phase-1" class="jump-link" data-section="phase-1"><span class="jump-dot"></span><span class="jump-label">Data & Classical ML</span></a>
       <a href="#phase-2" class="jump-link" data-section="phase-2"><span class="jump-dot"></span><span class="jump-label">Deep Learning</span></a>
-      <a href="#phase-3" class="jump-link" data-section="phase-3"><span class="jump-dot"></span><span class="jump-label">AI Engineering</span></a>
-      <a href="#phase-4" class="jump-link" data-section="phase-4"><span class="jump-dot"></span><span class="jump-label">Practice</span></a>
-      <a href="#phase-5" class="jump-link" data-section="phase-5"><span class="jump-dot"></span><span class="jump-label">Reading List</span></a>
+      <a href="#phase-3" class="jump-link" data-section="phase-3"><span class="jump-dot"></span><span class="jump-label">Specialization</span></a>
+      <a href="#phase-4" class="jump-link" data-section="phase-4"><span class="jump-dot"></span><span class="jump-label">Production & Ops</span></a>
+      <a href="#phase-5" class="jump-link" data-section="phase-5"><span class="jump-dot"></span><span class="jump-label">Practice & Portfolio</span></a>
+      <a href="#phase-6" class="jump-link" data-section="phase-6"><span class="jump-dot"></span><span class="jump-label">Reading List</span></a>
       <a href="#contributors" class="jump-link" data-section="contributors"><span class="jump-dot"></span><span class="jump-label">Wall of Fame</span></a>
     </aside>
 
@@ -663,6 +676,7 @@
       activeTrack = track;
       document.querySelectorAll('.track-btn').forEach(btn => {
         btn.classList.remove('is-active-all','is-active-ds','is-active-ml','is-active-ai');
+        btn.setAttribute('aria-pressed', btn.dataset.track === track);
         if (btn.dataset.track === track) btn.classList.add(`is-active-${track}`);
       });
       document.querySelectorAll('.resource-card-wrapper[data-tracks]').forEach(w => {
@@ -698,8 +712,9 @@
 
     // ── Progress calculation (alt-group aware) ───────────────────────────
     // Each alt_group counts as ONE slot: complete if ANY member is done.
+    // Optional resources are checkable but excluded from totals & certificates.
     function trackProgress(track) {
-      const all = RESOURCES.filter(r => r.tracks.includes(track));
+      const all = RESOURCES.filter(r => r.tracks.includes(track) && !r.optional);
       const seenGroups = new Set();
       let total = 0, done = 0;
       all.forEach(r => {
@@ -1226,7 +1241,7 @@
     initFadeIn();
     initEvents();
     applyTrack('all');
-    initAuth();           // async: loads session + syncs progress from Supabase
+    initAuth();           // async: loads session + syncs progress from Firebase
 
   })();
   </script>
