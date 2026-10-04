@@ -1,5 +1,7 @@
 # ForgeMee ⚒️
 
+> 📁 Part of my portfolio: [see this project and more →](https://eirini-portfolio-aer3.vercel.app/?utm_source=github&utm_medium=readme&utm_campaign=forgemee#story/forgemee)
+
 > Some legends are forged.
 
 Curated roadmap of free resources to become an **AI Engineer**, **Data Scientist**, or **ML Engineer** — from Python basics to production AI systems.
